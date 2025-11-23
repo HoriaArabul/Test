@@ -507,13 +507,14 @@
     </div>
 
     <script>
-        // ***************************************************************
-        // FIX: Insert your valid API Key here! The previous key was a placeholder.
-        // Get your key from Google AI Studio: https://ai.google.dev/gemini-api/docs/api-key
-        // ***************************************************************
-        const apiKey = "AIzaSyAPv3GQ__oZ_6Ci4K1cXq7GYAKrHpoVuyo"; 
+        // NOTE: If you are still seeing errors after this fix, the API key itself 
+        // (AIzaSyAD45jE-76AN0XzO7olAZQLx7ATiRfehO8) may be invalid, expired, or have 
+        // incorrect permissions set in Google AI Studio.
+        const apiKey = "AIzaSyAPv3GQ__oZ_6Ci4K1cXq7GYAKrHpoVuyo";
         const apiUrlBase = "https://generativelanguage.googleapis.com/v1beta/models/";
-        const modelName = "gemini-2.5-flash-preview-09-2025";
+        
+        // ** FIX APPLIED HERE: Changed to a valid model name **
+        const modelName = "gemini-2.5-flash"; 
 
         function navigateTo(sectionId) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -525,35 +526,27 @@
                 const navHeight = 80;
                 const elementPosition = el.getBoundingClientRect().top + window.scrollY;
                 const offsetPosition = elementPosition - navHeight;
-                window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
             }
         }
 
-        // Mobile Menu Logic (REFINED)
+        // Mobile Menu
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         
         function toggleMobileMenu() {
-            const isOpen = mobileMenu.classList.toggle('open');
+            mobileMenu.classList.toggle('hidden');
             const icon = mobileMenuBtn.querySelector('i');
-            if (isOpen) {
-                icon.setAttribute('data-lucide', 'x');
-            } else {
+            if (mobileMenu.classList.contains('hidden')) {
                 icon.setAttribute('data-lucide', 'menu');
+            } else {
+                icon.setAttribute('data-lucide', 'x');
             }
             lucide.createIcons();
         }
-        
-        function mobileScrollTo(sectionId) {
-            toggleMobileMenu();
-            setTimeout(() => {
-                const element = document.getElementById(sectionId);
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }, 300);
-        }
-
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
 
         // Observer
@@ -581,6 +574,20 @@
         function closeModal() {
             document.getElementById('customModal').classList.add('hidden');
             document.getElementById('customModal').classList.remove('flex');
+        }
+
+        // API Helper
+        async function fetchWithRetry(url, options, maxRetries = 3) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`Status: ${response.status}`);
+                    return response;
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(r => setTimeout(r, 1000));
+                }
+            }
         }
 
         async function generateAudit() {
@@ -614,15 +621,9 @@
             }
         }
 
-        // SIMPLIFIED API CALL
         async function callGemini(text, targetId, type) {
-            if (apiKey = "AIzaSyAPv3GQ__oZ_6Ci4K1cXq7GYAKrHpoVuyo") {
-                uiState(type, false);
-                return showModal("API Key Required", "Please replace 'YOUR_VALID_API_KEY_HERE' in the script with your actual Google AI API key.");
-            }
-            
             try {
-                const response = await fetch(
+                const response = await fetchWithRetry(
                     `${apiUrlBase}${modelName}:generateContent?key=${apiKey}`,
                     {
                         method: 'POST',
@@ -630,27 +631,19 @@
                         body: JSON.stringify({ contents: [{ parts: [{ text }] }] })
                     }
                 );
-                
                 const data = await response.json();
-                
-                if (!response.ok) {
-                    // Check for specific API error messages
-                    const errorMsg = data.error?.message || `API Error: ${response.status} ${response.statusText}`;
-                    throw new Error(errorMsg);
-                }
-
-                const content = data.candidates?.[0]?.content?.parts?.[0]?.text || "No content generated. Check input or API settings.";
+                const content = data.candidates?.[0]?.content?.parts?.[0]?.text || "Error.";
                 document.getElementById(targetId).innerHTML = content
                     .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
                     .replace(/\n/g, '<br>');
-
             } catch(e) {
-                console.error("Gemini Call Failed:", e.message);
-                document.getElementById(targetId).innerHTML = `<span class='text-red-600'>Error: ${e.message}</span>`;
+                document.getElementById(targetId).innerHTML = "<span class='text-red-400'>Error generating content.</span>";
             } finally {
                 uiState(type, false);
             }
         }
     </script>
+</body>
+</html>
 </body>
 </html>
