@@ -10,12 +10,22 @@
         /* Apple-style Font Stack */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            /* Vibrant Blue from Logo */
+            /* Initial State: Deep Blue */
             background-color: #3b82f6; 
             color: #0f172a; 
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             position: relative;
+            
+            /* ANIMATION: Fade background from Deep Blue to Light Ice Blue */
+            /* Starts after 1.4s (when swipe finishes) and takes 1s */
+            animation: bg-shift-to-light 1s ease-in-out 1.4s forwards;
+        }
+
+        /* The Background Color Animation */
+        @keyframes bg-shift-to-light {
+            from { background-color: #3b82f6; }
+            to { background-color: #eff6ff; } /* Very light blue/white */
         }
 
         /* --- BACKGROUND ANIMATION (The Swoosh) --- */
@@ -36,25 +46,21 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #f8fafc;
+            background-color: #ffffff; /* Pure White */
             
-            /* DESKTOP SHAPE: Standard Diagonal */
+            /* DESKTOP SHAPE */
             clip-path: polygon(35% 0, 100% 0, 100% 100%, 15% 100%);
             
             transform: translateX(100%); 
             animation: swoosh-enter 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             animation-delay: 0.2s; 
-            box-shadow: -20px 0 50px rgba(0,0,0,0.1);
+            box-shadow: -20px 0 50px rgba(0,0,0,0.05);
         }
 
-        /* --- MOBILE FIX: More Diagonal, High Visibility, No Obstruction --- */
+        /* --- MOBILE CLIP PATH --- */
         @media (max-width: 768px) {
             .white-wipe {
-                /* 40% 0   -> Starts 40% from the left at the top (Leaving a big blue chunk top-left)
-                   100% 0  -> Goes to top right
-                   100% 100% -> Goes to bottom right
-                   0% 100% -> Goes to bottom left (Full white at the bottom for text readability)
-                */
+                /* Keeps the diagonal, but the background behind it will fade to light blue */
                 clip-path: polygon(40% 0, 100% 0, 100% 100%, 0% 100%);
             }
         }
@@ -114,14 +120,14 @@
             background: rgba(59, 130, 246, 0.08); 
         }
 
-        /* --- MOBILE MENU --- */
+        /* --- MOBILE MENU ANIMATION & STYLE --- */
         .mobile-glass-container {
             position: absolute;
             top: 80px; 
             left: 0;
             width: 100%;
-            height: calc(100vh - 80px); /* Exact height calc */
-            background: rgba(248, 250, 252, 0.98); /* Solid clean background */
+            height: calc(100vh - 80px); 
+            background: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(25px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.5);
             display: flex;
@@ -129,9 +135,22 @@
             align-items: center;
             justify-content: flex-start;
             padding-top: 20px;
-            z-index: 999;
+            z-index: 9999; /* Highest Z-Index */
             overflow-y: auto;
             padding-bottom: 100px;
+            
+            /* Animation Properties */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Active State Class for Mobile Menu */
+        .mobile-glass-container.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
         .mobile-menu-btn-item {
@@ -147,7 +166,8 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             transition: all 0.2s ease;
-            display: block; /* Ensure link fills width */
+            display: block;
+            cursor: pointer;
         }
         .mobile-menu-btn-item:active {
             background: #eff6ff;
@@ -230,20 +250,20 @@
             </div>
         </div>
 
-        <div id="mobile-menu" class="hidden mobile-glass-container">
+        <div id="mobile-menu" class="mobile-glass-container">
             <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Menu</span>
             
-            <a href="#" onclick="mobileScrollTo(event, 'services')" class="mobile-menu-btn-item">Services</a>
-            <a href="#" onclick="mobileScrollTo(event, 'process')" class="mobile-menu-btn-item">Process</a>
+            <button onclick="mobileScrollTo('services')" class="mobile-menu-btn-item">Services</button>
+            <button onclick="mobileScrollTo('process')" class="mobile-menu-btn-item">Process</button>
             
             <div class="w-4/5 h-px bg-slate-200 my-4"></div>
             
-            <a href="terms.html" class="mobile-menu-btn-item text-sm">Terms of Service</a>
-            <a href="privacy.html" class="mobile-menu-btn-item text-sm">Privacy Policy</a>
+            <a href="terms.html" class="mobile-menu-btn-item text-sm no-underline block w-[85%]">Terms of Service</a>
+            <a href="privacy.html" class="mobile-menu-btn-item text-sm no-underline block w-[85%]">Privacy Policy</a>
 
             <div class="w-4/5 h-px bg-slate-200 my-4"></div>
 
-            <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="mobile-menu-btn-item" style="background: #eff6ff; color: #2563eb; border-color: #bfdbfe;">
+            <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="mobile-menu-btn-item no-underline block w-[85%]" style="background: #eff6ff; color: #2563eb; border-color: #bfdbfe;">
                 Book a Call
             </a>
         </div>
@@ -490,48 +510,35 @@
             }
         }
 
-        // Mobile Menu Logic
+        // Mobile Menu Logic (REFINED)
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         
         function toggleMobileMenu() {
-            mobileMenu.classList.toggle('hidden');
+            // Toggle the class "open" which handles visibility and animation via CSS
+            const isOpen = mobileMenu.classList.toggle('open');
+            
             const icon = mobileMenuBtn.querySelector('i');
-            if (mobileMenu.classList.contains('hidden')) {
-                icon.setAttribute('data-lucide', 'menu');
-            } else {
+            if (isOpen) {
                 icon.setAttribute('data-lucide', 'x');
+            } else {
+                icon.setAttribute('data-lucide', 'menu');
             }
             lucide.createIcons();
         }
         
-        // FIXED: Mobile Scroll Handler
-        // 1. Stops default link jump
-        // 2. Closes menu instantly
-        // 3. Calculates exact position and scrolls there smoothly
-        function mobileScrollTo(event, sectionId) {
-            event.preventDefault();
+        // FIXED: Mobile Scroll Handler using scrollIntoView
+        function mobileScrollTo(sectionId) {
+            // 1. Close menu
+            toggleMobileMenu();
             
-            // Close the menu first
-            mobileMenu.classList.add('hidden');
-            const icon = mobileMenuBtn.querySelector('i');
-            icon.setAttribute('data-lucide', 'menu');
-            lucide.createIcons();
-            
-            // Scroll Logic
+            // 2. Wait for menu to fade out, then scroll
             setTimeout(() => {
                 const element = document.getElementById(sectionId);
                 if (element) {
-                    const headerOffset = 80;
-                    const elementPosition = element.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth"
-                    });
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
-            }, 100); // Small delay to allow menu to disappear visually
+            }, 300);
         }
 
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
