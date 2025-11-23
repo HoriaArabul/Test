@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mister C Digital | AI Automations</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Icons --><script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* Apple-style Font Stack */
         body {
@@ -16,29 +16,29 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- NEW APPLE-STYLE LIQUID NAV --- */
+        /* --- NEW IOS-STYLE LIQUID NAV --- */
         .liquid-glass-nav {
-            /* Very low opacity background to let colors show through */
-            background: rgba(0, 0, 0, 0.25); 
+            /* Extremely low opacity base to let the background shine through */
+            background: rgba(0, 0, 0, 0.1); 
             
-            /* High blur + Saturation for the "Frost" effect */
+            /* High blur + Saturation for the "Deep Glass" effect */
             backdrop-filter: blur(50px) saturate(180%);
             -webkit-backdrop-filter: blur(50px) saturate(180%);
             
-            /* Subtle borders to define edges */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.05); /* Top highlight */
+            /* REMOVED BORDER. Replaced with subtle inset light to mimic liquid tension */
+            border: none;
+            box-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.05);
             
-            /* Remove the shimmer animation - Apple style is static and clean */
-            transition: all 0.3s ease;
+            /* Smooth transitions */
+            transition: background 0.5s ease;
         }
 
-        /* Mobile Menu Glass */
+        /* Mobile Menu Glass - Matches the navbar style */
         .mobile-glass-menu {
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(50px) saturate(180%);
-            -webkit-backdrop-filter: blur(50px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(60px) saturate(200%);
+            -webkit-backdrop-filter: blur(60px) saturate(200%);
+            border-bottom: none;
         }
 
         /* Animations */
@@ -51,6 +51,14 @@
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* SLOWER ANIMATIONS ON MOBILE */
+        @media (max-width: 768px) {
+            .reveal {
+                transition: all 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); /* Much slower, smoother ease */
+                transform: translateY(20px); /* Less movement distance for mobile */
+            }
         }
 
         .reveal-delay-1 { transition-delay: 0.1s; }
@@ -114,15 +122,15 @@
              transform: scale(0.98);
         }
 
-        /* Hero Glow - Adjusted to reach top of screen */
+        /* Hero Glow - Adjusted to sit BEHIND nav */
         .hero-glow {
             position: absolute;
-            top: 0; 
+            top: -100px; /* Pull up to ensure it covers the nav area */
             left: 50%;
             transform: translateX(-50%);
-            width: 120vw;
-            height: 100vh;
-            background: radial-gradient(circle at 50% 30%, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%);
+            width: 140vw;
+            height: 120vh;
+            background: radial-gradient(circle at 50% 40%, rgba(59,130,246,0.18) 0%, rgba(0,0,0,0) 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -130,16 +138,20 @@
 </head>
 <body class="antialiased selection:bg-blue-500 selection:text-white">
 
+    <!-- Navigation -->
+    <!-- Nav has no background color class here, relying on custom CSS for liquid effect -->
     <nav class="fixed w-full z-50 liquid-glass-nav top-0 h-16 md:h-20 flex items-center" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div class="flex justify-between items-center">
                 
+                <!-- Logo -->
                 <div class="flex-shrink-0 cursor-pointer active:scale-95 transition-transform" onclick="navigateTo('home')">
                     <img src="ala_bun__1_-removebg.png" alt="Mister C Digital" 
                          onerror="this.src='https://placehold.co/192x192/1e293b/ffffff?text=MC'"
-                         class="h-8 md:h-10 w-auto object-contain">
+                         class="h-8 md:h-10 w-auto object-contain drop-shadow-md">
                 </div>
                 
+                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center gap-6">
                     <a href="#" onclick="navigateTo('home'); scrollToSection('services')" class="nav-btn text-sm font-medium text-gray-300 hover:text-white">Services</a>
                     <a href="#" onclick="navigateTo('home'); scrollToSection('process')" class="nav-btn text-sm font-medium text-gray-300 hover:text-white">Process</a>
@@ -149,6 +161,7 @@
                     </a>
                 </div>
 
+                <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-white p-2">
                         <i data-lucide="menu" class="w-6 h-6"></i>
@@ -157,23 +170,28 @@
             </div>
         </div>
 
-        <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full mobile-glass-menu border-b border-white/10 shadow-2xl">
-            <div class="px-6 py-6 space-y-4">
-                <a href="#" onclick="toggleMobileMenu(); scrollToSection('services')" class="block text-lg font-medium text-gray-200 hover:text-white">Services</a>
-                <a href="#" onclick="toggleMobileMenu(); scrollToSection('process')" class="block text-lg font-medium text-gray-200 hover:text-white">Process</a>
-                <div class="h-px bg-white/10 my-4"></div>
-                <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="block w-full text-center bg-blue-600 text-white py-3 rounded-xl font-bold">Book a Call</a>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden absolute top-0 left-0 w-full h-screen mobile-glass-menu z-[-1] flex flex-col justify-center items-center">
+            <div class="px-6 py-6 space-y-8 text-center">
+                <a href="#" onclick="toggleMobileMenu(); scrollToSection('services')" class="block text-2xl font-medium text-gray-200 hover:text-white">Services</a>
+                <a href="#" onclick="toggleMobileMenu(); scrollToSection('process')" class="block text-2xl font-medium text-gray-200 hover:text-white">Process</a>
+                <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="inline-block mt-4 bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold">Book a Call</a>
             </div>
         </div>
     </nav>
 
+    <!-- MAIN LANDING PAGE -->
     <main id="home" class="active relative">
         
-        <section class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden pt-24 md:pt-0">
+        <!-- Hero Section -->
+        <!-- Added pt-24 md:pt-0 to push content down visually but keep bg up -->
+        <section class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden">
+            <!-- Glow sits behind everything -->
             <div class="hero-glow"></div>
             
-            <div class="max-w-5xl mx-auto w-full flex flex-col items-center justify-center relative z-10">
+            <div class="max-w-5xl mx-auto w-full flex flex-col items-center justify-center relative z-10 pt-20">
                 
+                <!-- 3D Composition -->
                 <div class="reveal mb-6 md:mb-8 relative group h-[300px] md:h-[400px] flex items-center justify-center w-full max-w-lg mx-auto">
                      <div class="absolute top-1/2 left-1/2 w-[350px] h-[350px] md:w-[600px] md:h-[600px] opacity-40 pointer-events-none animate-slow-rotate mix-blend-screen -translate-x-1/2 -translate-y-1/2">
                         <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
@@ -190,6 +208,7 @@
                           class="relative z-30 h-32 md:h-64 w-auto object-contain drop-shadow-2xl animate-float">
                 </div>
 
+                <!-- Text Content -->
                 <h1 class="reveal reveal-delay-1 text-4xl sm:text-6xl md:text-8xl font-bold tracking-tighter mb-6 leading-tight relative z-20">
                     Mister C Digital<br>
                     <span class="text-2xl sm:text-4xl md:text-5xl font-light text-gray-400 block mt-2 md:mt-4">Automation. Reimagined.</span>
@@ -211,6 +230,7 @@
             </div>
         </section>
 
+        <!-- Bento Grid Services -->
         <section id="services" class="py-20 md:py-32 relative z-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal">
@@ -219,6 +239,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto">
+                    <!-- Large Card -->
                     <div class="md:col-span-2 row-span-2 glass-card rounded-[2rem] p-6 md:p-14 relative overflow-hidden group reveal">
                         <div class="absolute -top-10 -right-10 p-8 opacity-10">
                             <i data-lucide="bot" class="w-40 h-40 md:w-64 md:h-64 text-blue-500"></i>
@@ -239,6 +260,7 @@
                         </div>
                     </div>
 
+                    <!-- Small Card 1 -->
                     <div class="glass-card rounded-[2rem] p-6 md:p-10 reveal reveal-delay-1 flex flex-col justify-between h-64 md:h-auto">
                         <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center mb-4">
                             <i data-lucide="zap" class="text-indigo-400 w-6 h-6"></i>
@@ -249,6 +271,7 @@
                         </div>
                     </div>
 
+                    <!-- Small Card 2 -->
                     <div class="glass-card rounded-[2rem] p-6 md:p-10 reveal reveal-delay-2 flex flex-col justify-between h-64 md:h-auto">
                         <div class="w-12 h-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center mb-4">
                             <i data-lucide="bar-chart-3" class="text-cyan-400 w-6 h-6"></i>
@@ -259,6 +282,7 @@
                         </div>
                     </div>
                     
+                    <!-- Wide Card -->
                     <div class="md:col-span-3 glass-card rounded-[2rem] p-6 md:p-14 flex flex-col md:flex-row items-start md:items-center justify-between reveal gap-6">
                         <div class="flex-1">
                             <h3 class="text-xl md:text-3xl font-bold mb-2 md:mb-4 text-white">Content at Scale</h3>
@@ -274,6 +298,7 @@
             </div>
         </section>
 
+        <!-- Process Section -->
         <section id="process" class="py-20 md:py-32 border-t border-white/5 relative z-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal">
@@ -281,8 +306,10 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                    <!-- Line -->
                     <div class="hidden md:block absolute top-[3rem] left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 z-0"></div>
 
+                    <!-- Steps -->
                     <div class="text-center reveal reveal-delay-1 relative z-10">
                         <div class="w-24 h-24 mx-auto bg-black rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-gray-500 border-4 border-gray-900 shadow-xl">1</div>
                         <h3 class="text-xl font-bold mb-2 text-white">Audit</h3>
@@ -302,6 +329,7 @@
             </div>
         </section>
 
+        <!-- AI PLAYGROUND -->
         <section id="playground" class="py-20 md:py-32 relative z-20 border-t border-white/5 bg-black/50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal">
@@ -314,6 +342,7 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                     
+                    <!-- Audit Tool -->
                     <div class="glass-card rounded-[2rem] p-6 md:p-12 reveal relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
                             <i data-lucide="brain-circuit" class="w-32 h-32 text-purple-500"></i>
@@ -338,6 +367,7 @@
                         </div>
                     </div>
 
+                    <!-- Content Tool -->
                     <div class="glass-card rounded-[2rem] p-6 md:p-12 reveal reveal-delay-1 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
                             <i data-lucide="pen-tool" class="w-32 h-32 text-pink-500"></i>
@@ -363,6 +393,7 @@
                     </div>
                 </div>
                 
+                <!-- Final CTA -->
                 <div class="text-center mt-20 md:mt-32 reveal px-4">
                     <h2 class="text-2xl md:text-4xl font-bold mb-4 text-gradient">Ready to automate?</h2>
                     <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="inline-block bg-white text-black px-8 py-3 rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-lg">
@@ -372,11 +403,13 @@
             </div>
         </section>
 
+        <!-- Footer -->
         <footer class="py-12 border-t border-white/10 bg-black text-center text-gray-600 text-xs md:text-sm">
             <p>&copy; 2025 Mister C Digital.</p>
         </footer>
     </main>
 
+    <!-- Modal -->
     <div id="customModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] hidden items-center justify-center p-4" onclick="closeModal()">
         <div class="bg-[#1c1c1e] border border-gray-700 rounded-2xl p-6 max-w-sm w-full shadow-2xl" onclick="event.stopPropagation()">
             <h4 id="modalTitle" class="text-lg font-bold text-white mb-2">Notice</h4>
@@ -386,6 +419,7 @@
     </div>
 
 
+    <!-- JAVASCRIPT -->
     <script>
         const apiKey = "AIzaSyAD45jE-76AN0XzO7olAZQLx7ATiRfehO8";
         const apiUrlBase = "https://generativelanguage.googleapis.com/v1beta/models/";
