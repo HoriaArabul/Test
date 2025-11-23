@@ -538,9 +538,9 @@
         const mobileMenu = document.getElementById('mobile-menu');
         
         function toggleMobileMenu() {
-            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('open');
             const icon = mobileMenuBtn.querySelector('i');
-            if (mobileMenu.classList.contains('hidden')) {
+            if (mobileMenu.classList.contains('open')) {
                 icon.setAttribute('data-lucide', 'menu');
             } else {
                 icon.setAttribute('data-lucide', 'x');
