@@ -507,7 +507,11 @@
     </div>
 
     <script>
-        const apiKey = "AIzaSyAD45jE-76AN0XzO7olAZQLx7ATiRfehO8";
+        // ***************************************************************
+        // FIX: Insert your valid API Key here! The previous key was a placeholder.
+        // Get your key from Google AI Studio: https://ai.google.dev/gemini-api/docs/api-key
+        // ***************************************************************
+        const apiKey = "YOUR_VALID_API_KEY_HERE"; 
         const apiUrlBase = "https://generativelanguage.googleapis.com/v1beta/models/";
         const modelName = "gemini-2.5-flash-preview-09-2025";
 
@@ -530,9 +534,7 @@
         const mobileMenu = document.getElementById('mobile-menu');
         
         function toggleMobileMenu() {
-            // Toggle the class "open" which handles visibility and animation via CSS
             const isOpen = mobileMenu.classList.toggle('open');
-            
             const icon = mobileMenuBtn.querySelector('i');
             if (isOpen) {
                 icon.setAttribute('data-lucide', 'x');
@@ -542,12 +544,8 @@
             lucide.createIcons();
         }
         
-        // FIXED: Mobile Scroll Handler using scrollIntoView
         function mobileScrollTo(sectionId) {
-            // 1. Close menu
             toggleMobileMenu();
-            
-            // 2. Wait for menu to fade out, then scroll
             setTimeout(() => {
                 const element = document.getElementById(sectionId);
                 if (element) {
@@ -585,20 +583,6 @@
             document.getElementById('customModal').classList.remove('flex');
         }
 
-        // API Helper
-        async function fetchWithRetry(url, options, maxRetries = 3) {
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (!response.ok) throw new Error(`Status: ${response.status}`);
-                    return response;
-                } catch (error) {
-                    if (i === maxRetries - 1) throw error;
-                    await new Promise(r => setTimeout(r, 1000));
-                }
-            }
-        }
-
         async function generateAudit() {
             const input = document.getElementById('auditInput');
             const val = input.value.trim();
@@ -630,9 +614,15 @@
             }
         }
 
+        // SIMPLIFIED API CALL
         async function callGemini(text, targetId, type) {
+            if (apiKey === "AIzaSyAD45jE-76AN0XzO7olAZQLx7ATiRfehO8") {
+                uiState(type, false);
+                return showModal("API Key Required", "Please replace 'YOUR_VALID_API_KEY_HERE' in the script with your actual Google AI API key.");
+            }
+            
             try {
-                const response = await fetchWithRetry(
+                const response = await fetch(
                     `${apiUrlBase}${modelName}:generateContent?key=${apiKey}`,
                     {
                         method: 'POST',
@@ -640,13 +630,23 @@
                         body: JSON.stringify({ contents: [{ parts: [{ text }] }] })
                     }
                 );
+                
                 const data = await response.json();
-                const content = data.candidates?.[0]?.content?.parts?.[0]?.text || "Error.";
+                
+                if (!response.ok) {
+                    // Check for specific API error messages
+                    const errorMsg = data.error?.message || `API Error: ${response.status} ${response.statusText}`;
+                    throw new Error(errorMsg);
+                }
+
+                const content = data.candidates?.[0]?.content?.parts?.[0]?.text || "No content generated. Check input or API settings.";
                 document.getElementById(targetId).innerHTML = content
                     .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
                     .replace(/\n/g, '<br>');
+
             } catch(e) {
-                document.getElementById(targetId).innerHTML = "<span class='text-red-400'>Error generating content.</span>";
+                console.error("Gemini Call Failed:", e.message);
+                document.getElementById(targetId).innerHTML = `<span class='text-red-600'>Error: ${e.message}</span>`;
             } finally {
                 uiState(type, false);
             }
