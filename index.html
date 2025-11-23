@@ -38,7 +38,7 @@
             height: 100%;
             background-color: #f8fafc;
             
-            /* DESKTOP SHAPE: Diagonal cut leaving blue on left */
+            /* DESKTOP SHAPE: Standard Diagonal */
             clip-path: polygon(35% 0, 100% 0, 100% 100%, 15% 100%);
             
             transform: translateX(100%); 
@@ -47,13 +47,15 @@
             box-shadow: -20px 0 50px rgba(0,0,0,0.1);
         }
 
-        /* --- MOBILE FIX: Make "Less Blue" / More Readable --- */
+        /* --- MOBILE FIX: More Diagonal, High Visibility, No Obstruction --- */
         @media (max-width: 768px) {
             .white-wipe {
-                /* This covers almost the entire screen with white, leaving just 
-                   a tiny sliver of blue at the top left for style, 
-                   ensuring text is readable. */
-                clip-path: polygon(5% 0, 100% 0, 100% 100%, 0% 100%);
+                /* 40% 0   -> Starts 40% from the left at the top (Leaving a big blue chunk top-left)
+                   100% 0  -> Goes to top right
+                   100% 100% -> Goes to bottom right
+                   0% 100% -> Goes to bottom left (Full white at the bottom for text readability)
+                */
+                clip-path: polygon(40% 0, 100% 0, 100% 100%, 0% 100%);
             }
         }
 
@@ -118,7 +120,7 @@
             top: 80px; 
             left: 0;
             width: 100%;
-            height: 100vh; /* Full height */
+            height: calc(100vh - 80px); /* Exact height calc */
             background: rgba(248, 250, 252, 0.98); /* Solid clean background */
             backdrop-filter: blur(25px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.5);
@@ -145,11 +147,13 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             transition: all 0.2s ease;
+            display: block; /* Ensure link fills width */
         }
         .mobile-menu-btn-item:active {
             background: #eff6ff;
             border-color: #3b82f6;
             transform: scale(0.98);
+            color: #2563eb;
         }
 
         /* Animations */
@@ -229,8 +233,8 @@
         <div id="mobile-menu" class="hidden mobile-glass-container">
             <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Menu</span>
             
-            <button onclick="handleMobileNav('services')" class="mobile-menu-btn-item">Services</button>
-            <button onclick="handleMobileNav('process')" class="mobile-menu-btn-item">Process</button>
+            <a href="#" onclick="mobileScrollTo(event, 'services')" class="mobile-menu-btn-item">Services</a>
+            <a href="#" onclick="mobileScrollTo(event, 'process')" class="mobile-menu-btn-item">Process</a>
             
             <div class="w-4/5 h-px bg-slate-200 my-4"></div>
             
@@ -501,17 +505,33 @@
             lucide.createIcons();
         }
         
-        // FIX: Scrolls to section and closes menu
-        function handleMobileNav(sectionId) {
-            toggleMobileMenu(); // Close Menu
-            // Wait for menu to close visually before scrolling
+        // FIXED: Mobile Scroll Handler
+        // 1. Stops default link jump
+        // 2. Closes menu instantly
+        // 3. Calculates exact position and scrolls there smoothly
+        function mobileScrollTo(event, sectionId) {
+            event.preventDefault();
+            
+            // Close the menu first
+            mobileMenu.classList.add('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.setAttribute('data-lucide', 'menu');
+            lucide.createIcons();
+            
+            // Scroll Logic
             setTimeout(() => {
-                if(sectionId === 'home') {
-                    navigateTo('home');
-                } else {
-                    scrollToSection(sectionId);
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    const headerOffset = 80;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
                 }
-            }, 200);
+            }, 100); // Small delay to allow menu to disappear visually
         }
 
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
