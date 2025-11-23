@@ -10,38 +10,134 @@
         /* Apple-style Font Stack */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f4f8; /* Light blue-grey base */
+            background-color: #f8fafc; /* Very light slate */
             background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), 
-                radial-gradient(at 100% 0%, rgba(147, 197, 253, 0.1) 0px, transparent 50%);
-            color: #1e293b; /* Slate 900 */
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%), 
+                radial-gradient(at 100% 100%, rgba(147, 197, 253, 0.15) 0px, transparent 50%);
+            color: #0f172a; /* Slate 900 */
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- LIGHT MODE LIQUID GLASS NAV --- */
+        /* --- NAVBAR GLASS --- */
         .liquid-glass-nav {
-            /* White base with very low opacity */
-            background: rgba(255, 255, 255, 0.4); 
-            
-            /* High blur + Saturation for the "Ice" effect */
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            
-            /* Optical borders for glass realism in light mode */
+            background: rgba(255, 255, 255, 0.1); /* Clearer base */
+            backdrop-filter: blur(12px) saturate(120%);
+            -webkit-backdrop-filter: blur(12px) saturate(120%);
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 
-                inset 0 1px 0 0 rgba(255, 255, 255, 0.9), /* Top highlight */
-                0 4px 30px rgba(0, 0, 0, 0.03); /* Soft shadow */
-            
-            transition: background 0.5s ease;
+                inset 0 1px 1px rgba(255, 255, 255, 0.9),
+                0 4px 20px -5px rgba(0, 0, 0, 0.05); /* Softer shadow */
+            transition: all 0.3s ease;
         }
 
-        /* Mobile Menu Glass */
-        .mobile-glass-menu {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(60px) saturate(200%);
-            -webkit-backdrop-filter: blur(60px) saturate(200%);
+        /* --- NEW PROFESSIONAL LIQUID BUTTONS (Gemstone Style) --- */
+        .btn-liquid {
+            position: relative;
+            background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%); /* Clean Gradient */
+            color: white;
+            border: none;
+            /* The "Glass" Definition */
+            box-shadow: 
+                /* Sharp Top Reflection (The "Wet" look) */
+                inset 0 2px 1px rgba(255, 255, 255, 0.5), 
+                /* Bottom Depth */
+                inset 0 -4px 6px rgba(0, 0, 0, 0.1),
+                /* Drop Shadow */
+                0 4px 10px rgba(37, 99, 235, 0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 10;
+        }
+
+        /* Removed the blurry ::before element completely */
+
+        .btn-liquid:hover {
+            transform: translateY(-2px) scale(1.02);
+            background: linear-gradient(180deg, #4f93f6 0%, #3b82f6 100%); /* Slightly lighter on hover */
+            box-shadow: 
+                /* Intensified Top Reflection */
+                inset 0 3px 2px rgba(255, 255, 255, 0.7),
+                /* Deeper Bottom shading */
+                inset 0 -4px 12px rgba(0, 0, 0, 0.15),
+                /* Outer Glow */
+                0 10px 25px -5px rgba(37, 99, 235, 0.5);
+        }
+        
+        .btn-liquid:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* --- NAVBAR TEXT BUTTONS (Tinted Liquid) --- */
+        .nav-link {
+            position: relative;
+            padding: 8px 18px;
+            border-radius: 99px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #475569;
+            border: 1px solid transparent; /* Prevents layout shift */
+        }
+        
+        .nav-link:hover {
+            color: #1e40af; /* Darker Blue Text */
+            /* Tinted Water Background */
+            background: rgba(59, 130, 246, 0.08); 
+            /* Glass Borders */
+            border-color: rgba(59, 130, 246, 0.2);
+            /* Specular Highlights for Visibility */
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.9), /* Sharp top shine */
+                0 4px 10px rgba(59, 130, 246, 0.1);
+        }
+
+        /* --- MOBILE MENU GLASS --- */
+        .mobile-glass-container {
+            position: absolute;
+            top: 80px; 
+            left: 0;
+            width: 100%;
+            height: auto;
+            min-height: 400px;
+            background: rgba(240, 244, 248, 0.95); /* Slightly more opaque for readability */
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform-origin: top;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 40px;
+            z-index: 40;
+        }
+
+        .mobile-menu-btn-item {
+            width: 80%;
+            padding: 16px 24px;
+            margin-bottom: 16px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #334155;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-btn-item:active, .mobile-menu-btn-item:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(0.98);
+            color: #2563eb;
+            box-shadow: 
+                inset 0 0 15px rgba(37, 99, 235, 0.1),
+                0 2px 5px rgba(0,0,0,0.05);
+            border-color: #2563eb;
         }
 
         /* Animations */
@@ -50,138 +146,38 @@
             transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
-        @media (max-width: 768px) {
-            .reveal {
-                transition: all 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
-                transform: translateY(20px);
-            }
-        }
-
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-
-        /* Floating Animation */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        /* --- NEW CSS-ONLY ROTATING ELEMENT (The "Reactor") --- */
-        .reactor-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .reactor-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(59, 130, 246, 0.1);
-        }
-
-        /* Outer Glow Ring */
-        .ring-1 {
-            width: 100%;
-            height: 100%;
-            background: conic-gradient(from 0deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%);
-            animation: spin 20s linear infinite;
-        }
-
-        /* Middle Detail Ring */
-        .ring-2 {
-            width: 70%;
-            height: 70%;
-            border: 1px dashed rgba(59, 130, 246, 0.3);
-            animation: spin-reverse 30s linear infinite;
-        }
-
-        /* Inner Core Gradient */
-        .ring-3 {
-            width: 50%;
-            height: 50%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
-            filter: blur(20px);
-            animation: pulse-glow 4s ease-in-out infinite;
-        }
+        /* Reactor (Background) */
+        .reactor-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .reactor-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(59, 130, 246, 0.1); }
+        .ring-1 { width: 100%; height: 100%; background: conic-gradient(from 0deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%); animation: spin 20s linear infinite; }
+        .ring-2 { width: 70%; height: 70%; border: 1px dashed rgba(59, 130, 246, 0.3); animation: spin-reverse 30s linear infinite; }
+        .ring-3 { width: 50%; height: 50%; background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%); filter: blur(20px); animation: pulse-glow 4s ease-in-out infinite; }
 
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes spin-reverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
         @keyframes pulse-glow { 0%, 100% { opacity: 0.5; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
 
-
-        /* Gradient Text */
-        .text-gradient {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .text-gradient-dark {
-            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Nav Button Hover */
-        .nav-btn {
-            position: relative;
-            transition: color 0.3s ease;
-            color: #475569;
-        }
-        .nav-btn:hover {
-            color: #0f172a;
-        }
-        .nav-btn::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px; /* Thicker for light mode */
-            bottom: -2px;
-            left: 50%;
-            background-color: #2563eb; /* Blue underline */
-            transition: all 0.3s ease;
-        }
-        .nav-btn:hover::after {
-            width: 100%;
-            left: 0;
-        }
-
-        /* Glass Cards - Light Mode */
+        /* Glass Cards */
         .glass-card {
-            background: rgba(255, 255, 255, 0.65); /* White milky glass */
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.8); /* Crisp white border */
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 
-                0 10px 30px -10px rgba(59, 130, 246, 0.15), /* Blue tinted shadow */
-                inset 0 0 20px rgba(255, 255, 255, 0.5); /* Inner light */
+                0 10px 40px -10px rgba(59, 130, 246, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
         }
         .glass-card:hover {
             box-shadow: 
-                0 20px 40px -10px rgba(59, 130, 246, 0.25),
-                inset 0 0 0 1px rgba(255,255,255,0.9);
-            background: rgba(255, 255, 255, 0.8);
-        }
-        .glass-card:active {
-             transform: scale(0.98);
+                0 25px 50px -12px rgba(59, 130, 246, 0.2),
+                inset 0 0 20px rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.7);
+            border-color: #fff;
         }
 
-        /* Hero Glow - Subtle Blue for White BG */
         .hero-glow {
             position: absolute;
             top: -150px;
@@ -189,67 +185,65 @@
             transform: translateX(-50%);
             width: 120vw;
             height: 120vh;
-            background: radial-gradient(circle at 50% 40%, rgba(59,130,246,0.12) 0%, rgba(255,255,255,0) 65%);
+            background: radial-gradient(circle at 50% 40%, rgba(59,130,246,0.1) 0%, rgba(255,255,255,0) 65%);
             pointer-events: none;
             z-index: 0;
         }
         
-        /* Inputs for Light Mode */
         .input-glass {
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(203, 213, 225, 0.5);
             color: #1e293b;
-        }
-        .input-glass::placeholder {
-            color: #94a3b8;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
         .input-glass:focus {
-            background: rgba(255, 255, 255, 0.9);
+            background: #fff;
             border-color: #3b82f6;
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
     </style>
 </head>
-<body class="antialiased selection:bg-blue-200 selection:text-blue-900">
+<body class="antialiased selection:bg-blue-100 selection:text-blue-900">
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 liquid-glass-nav top-0 h-16 md:h-20 flex items-center" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="flex justify-between items-center">
+    <nav class="fixed w-full z-50 liquid-glass-nav top-0 h-20 flex items-center transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-50">
+            <div class="flex justify-between items-center h-full">
                 
                 <!-- Logo -->
                 <div class="flex-shrink-0 cursor-pointer active:scale-95 transition-transform" onclick="navigateTo('home')">
                     <img src="ala_bun__1_-removebg.png" alt="Mister C Digital" 
                          onerror="this.src='https://placehold.co/192x192/f0f4f8/1e40af?text=MC'"
-                         class="h-8 md:h-10 w-auto object-contain drop-shadow-sm">
+                         class="h-10 w-auto object-contain drop-shadow-sm">
                 </div>
                 
                 <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center gap-6">
-                    <a href="#" onclick="navigateTo('home'); scrollToSection('services')" class="nav-btn text-sm font-semibold">Services</a>
-                    <a href="#" onclick="navigateTo('home'); scrollToSection('process')" class="nav-btn text-sm font-semibold">Process</a>
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="#" onclick="navigateTo('home'); scrollToSection('services')" class="nav-link text-sm">Services</a>
+                    <a href="#" onclick="navigateTo('home'); scrollToSection('process')" class="nav-link text-sm">Process</a>
                     
-                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="ml-4 bg-blue-600 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-[0_4px_14px_0_rgba(37,99,235,0.39)]">
+                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="ml-4 btn-liquid px-6 py-2.5 rounded-full text-xs font-bold tracking-wide uppercase">
                         Book a Call
                     </a>
                 </div>
 
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-slate-700 p-2">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    <button id="mobile-menu-btn" class="text-slate-700 p-2 hover:bg-white/20 rounded-full transition-colors relative z-50">
+                        <i data-lucide="menu" class="w-7 h-7"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden absolute top-0 left-0 w-full h-screen mobile-glass-menu z-[-1] flex flex-col justify-center items-center">
-            <div class="px-6 py-6 space-y-8 text-center">
-                <a href="#" onclick="toggleMobileMenu(); scrollToSection('services')" class="block text-3xl font-bold text-slate-800 tracking-tight">Services</a>
-                <a href="#" onclick="toggleMobileMenu(); scrollToSection('process')" class="block text-3xl font-bold text-slate-800 tracking-tight">Process</a>
-                <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="inline-block mt-8 bg-blue-600 text-white px-10 py-4 rounded-full text-xl font-bold shadow-xl">Book a Call</a>
-            </div>
+        <!-- Mobile Menu Dropdown (Liquid Style) -->
+        <div id="mobile-menu" class="hidden mobile-glass-container">
+            <a href="#" onclick="toggleMobileMenu(); scrollToSection('services')" class="mobile-menu-btn-item">Services</a>
+            <a href="#" onclick="toggleMobileMenu(); scrollToSection('process')" class="mobile-menu-btn-item">Process</a>
+            <div class="w-4/5 h-px bg-slate-300/50 my-4"></div>
+            <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="mobile-menu-btn-item" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; border-color: rgba(37, 99, 235, 0.3);">
+                Book a Call
+            </a>
         </div>
     </nav>
 
@@ -257,35 +251,28 @@
     <main id="home" class="active relative">
         
         <!-- Hero Section -->
-        <section class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden">
+        <section class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden pt-20">
             <div class="hero-glow"></div>
             
-            <div class="max-w-5xl mx-auto w-full flex flex-col items-center justify-center relative z-10 pt-20">
+            <div class="max-w-5xl mx-auto w-full flex flex-col items-center justify-center relative z-10">
                 
-                <!-- NEW UI/UX THEMED 3D COMPOSITION -->
-                <div class="reveal mb-6 md:mb-8 relative group h-[300px] md:h-[400px] flex items-center justify-center w-full max-w-lg mx-auto">
-                     
-                     <!-- The "Reactor" Background (Replaces Image) -->
+                <!-- Reactor & Logo -->
+                <div class="reveal mb-8 relative group h-[300px] md:h-[400px] flex items-center justify-center w-full max-w-lg mx-auto">
                      <div class="absolute top-1/2 left-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                        <div class="reactor-container opacity-60">
+                        <div class="reactor-container opacity-50">
                             <div class="reactor-ring ring-1"></div>
                             <div class="reactor-ring ring-2"></div>
                             <div class="reactor-ring ring-3"></div>
                         </div>
                      </div>
-
-                     <!-- Glass Overlay Circle -->
                      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] md:w-[280px] md:h-[280px] opacity-100 pointer-events-none">
-                         <div class="w-full h-full rounded-full border border-white/40 bg-white/10 backdrop-blur-sm shadow-[0_0_60px_rgba(59,130,246,0.1)]"></div>
+                         <div class="w-full h-full rounded-full border border-white/40 bg-white/5 backdrop-blur-[2px] shadow-[0_0_60px_rgba(59,130,246,0.1)]"></div>
                      </div>
-
-                     <!-- Main Logo -->
                      <img src="ala_bun__1_-removebg.png" alt="Mister C Digital Logo" 
                           onerror="this.src='https://placehold.co/192x192/f1f5f9/1e293b?text=MC'"
                           class="relative z-30 h-32 md:h-64 w-auto object-contain drop-shadow-2xl animate-float">
                 </div>
 
-                <!-- Text Content -->
                 <h1 class="reveal reveal-delay-1 text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter mb-6 leading-[1.1] relative z-20 text-slate-900">
                     Mister C Digital<br>
                     <span class="text-3xl sm:text-4xl md:text-5xl font-light text-slate-400 block mt-2 md:mt-4">Automation. Reimagined.</span>
@@ -295,11 +282,11 @@
                     We build intelligent AI infrastructures that scale your business while you sleep.
                 </p>
                 
-                <div class="reveal reveal-delay-3 flex flex-col w-full sm:w-auto sm:flex-row gap-4 justify-center items-center relative z-50">
-                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="w-full sm:w-auto bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-700 transition-all shadow-[0_10px_20px_-5px_rgba(37,99,235,0.4)] text-center">
+                <div class="reveal reveal-delay-3 flex flex-col w-full sm:w-auto sm:flex-row gap-5 justify-center items-center relative z-50">
+                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="w-full sm:w-auto btn-liquid px-10 py-4 rounded-full text-lg font-bold text-center">
                         Start Transformation
                     </a>
-                    <button onclick="scrollToSection('services')" class="w-full sm:w-auto text-slate-500 hover:text-slate-900 flex items-center justify-center gap-2 px-6 py-4 transition-colors rounded-full hover:bg-slate-100">
+                    <button onclick="scrollToSection('services')" class="w-full sm:w-auto text-slate-500 hover:text-slate-900 flex items-center justify-center gap-2 px-6 py-4 transition-colors rounded-full hover:bg-slate-100/50">
                         Learn more <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -317,30 +304,30 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto">
                     <!-- Large Card -->
-                    <div class="md:col-span-2 row-span-2 glass-card rounded-[2rem] p-6 md:p-14 relative overflow-hidden group reveal">
+                    <div class="md:col-span-2 row-span-2 glass-card rounded-[2.5rem] p-8 md:p-14 relative overflow-hidden group reveal">
                         <div class="absolute -top-10 -right-10 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                             <i data-lucide="bot" class="w-40 h-40 md:w-64 md:h-64 text-blue-600"></i>
                         </div>
                         <div class="relative z-10">
-                            <div class="w-12 h-12 bg-blue-100 border border-blue-200 rounded-xl flex items-center justify-center mb-6">
-                                <i data-lucide="cpu" class="text-blue-600 w-6 h-6"></i>
+                            <div class="w-14 h-14 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center mb-8">
+                                <i data-lucide="cpu" class="text-blue-600 w-7 h-7"></i>
                             </div>
                             <h3 class="text-2xl md:text-3xl font-bold mb-4 text-slate-800">Custom AI Agents</h3>
                             <p class="text-slate-500 text-base md:text-lg leading-relaxed mb-8 max-w-md">
                                 Autonomous agents for support, leads, and data entry. Trained on your business data.
                             </p>
-                            <ul class="space-y-3 text-slate-600 text-sm md:text-base font-medium">
-                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-blue-600"></i> 24/7 Customer Support</li>
-                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-blue-600"></i> Instant Lead Qualification</li>
-                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-blue-600"></i> Multi-platform Integration</li>
+                            <ul class="space-y-4 text-slate-600 text-sm md:text-base font-medium">
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-blue-600"></i> 24/7 Customer Support</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-blue-600"></i> Instant Lead Qualification</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-blue-600"></i> Multi-platform Integration</li>
                             </ul>
                         </div>
                     </div>
 
                     <!-- Small Card 1 -->
-                    <div class="glass-card rounded-[2rem] p-6 md:p-10 reveal reveal-delay-1 flex flex-col justify-between h-64 md:h-auto">
-                        <div class="w-12 h-12 bg-indigo-100 border border-indigo-200 rounded-xl flex items-center justify-center mb-4">
-                            <i data-lucide="zap" class="text-indigo-600 w-6 h-6"></i>
+                    <div class="glass-card rounded-[2.5rem] p-8 reveal reveal-delay-1 flex flex-col justify-between h-72 md:h-auto">
+                        <div class="w-14 h-14 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center mb-4">
+                            <i data-lucide="zap" class="text-indigo-600 w-7 h-7"></i>
                         </div>
                         <div>
                             <h3 class="text-xl md:text-2xl font-bold mb-2 text-slate-800">Automation</h3>
@@ -349,9 +336,9 @@
                     </div>
 
                     <!-- Small Card 2 -->
-                    <div class="glass-card rounded-[2rem] p-6 md:p-10 reveal reveal-delay-2 flex flex-col justify-between h-64 md:h-auto">
-                        <div class="w-12 h-12 bg-cyan-100 border border-cyan-200 rounded-xl flex items-center justify-center mb-4">
-                            <i data-lucide="bar-chart-3" class="text-cyan-600 w-6 h-6"></i>
+                    <div class="glass-card rounded-[2.5rem] p-8 reveal reveal-delay-2 flex flex-col justify-between h-72 md:h-auto">
+                        <div class="w-14 h-14 bg-cyan-50 border border-cyan-100 rounded-2xl flex items-center justify-center mb-4">
+                            <i data-lucide="bar-chart-3" class="text-cyan-600 w-7 h-7"></i>
                         </div>
                         <div>
                             <h3 class="text-xl md:text-2xl font-bold mb-2 text-slate-800">Analytics</h3>
@@ -360,14 +347,14 @@
                     </div>
                     
                     <!-- Wide Card -->
-                    <div class="md:col-span-3 glass-card rounded-[2rem] p-6 md:p-14 flex flex-col md:flex-row items-start md:items-center justify-between reveal gap-6">
+                    <div class="md:col-span-3 glass-card rounded-[2.5rem] p-8 md:p-14 flex flex-col md:flex-row items-start md:items-center justify-between reveal gap-8">
                         <div class="flex-1">
-                            <h3 class="text-xl md:text-3xl font-bold mb-2 md:mb-4 text-slate-800">Content at Scale</h3>
+                            <h3 class="text-xl md:text-3xl font-bold mb-4 text-slate-800">Content at Scale</h3>
                             <p class="text-slate-500 text-sm md:text-lg max-w-3xl">
                                 SEO blogs, social posts, and newsletters that sound like you, on autopilot.
                             </p>
                         </div>
-                        <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="w-full md:w-auto text-center bg-blue-600 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg hover:bg-blue-700 transition-colors">
+                        <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="w-full md:w-auto text-center btn-liquid px-8 py-3 rounded-full text-sm font-bold">
                             See it in action
                         </a>
                     </div>
@@ -383,10 +370,8 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
-                    <!-- Line -->
                     <div class="hidden md:block absolute top-[3rem] left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-slate-200 via-blue-200 to-slate-200 z-0"></div>
 
-                    <!-- Steps -->
                     <div class="text-center reveal reveal-delay-1 relative z-10">
                         <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-slate-400 border-4 border-slate-100 shadow-xl">1</div>
                         <h3 class="text-xl font-bold mb-2 text-slate-800">Audit</h3>
@@ -419,8 +404,7 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                     
-                    <!-- Audit Tool -->
-                    <div class="glass-card rounded-[2rem] p-6 md:p-12 reveal relative overflow-hidden">
+                    <div class="glass-card rounded-[2.5rem] p-8 md:p-12 reveal relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                             <i data-lucide="brain-circuit" class="w-32 h-32 text-purple-600"></i>
                         </div>
@@ -444,8 +428,7 @@
                         </div>
                     </div>
 
-                    <!-- Content Tool -->
-                    <div class="glass-card rounded-[2rem] p-6 md:p-12 reveal reveal-delay-1 relative overflow-hidden">
+                    <div class="glass-card rounded-[2.5rem] p-8 md:p-12 reveal reveal-delay-1 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                             <i data-lucide="pen-tool" class="w-32 h-32 text-pink-600"></i>
                         </div>
@@ -470,10 +453,9 @@
                     </div>
                 </div>
                 
-                <!-- Final CTA -->
                 <div class="text-center mt-20 md:mt-32 reveal px-4">
                     <h2 class="text-2xl md:text-4xl font-bold mb-4 text-slate-800">Ready to automate?</h2>
-                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-lg hover:shadow-blue-500/50">
+                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="inline-block btn-liquid px-10 py-4 rounded-full text-lg font-bold">
                         Book Your Free Call
                     </a>
                 </div>
@@ -503,7 +485,6 @@
         const modelName = "gemini-2.5-flash-preview-09-2025";
 
         function navigateTo(sectionId) {
-            // Simple smooth scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -523,6 +504,7 @@
         // Mobile Menu
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        
         function toggleMobileMenu() {
             mobileMenu.classList.toggle('hidden');
             const icon = mobileMenuBtn.querySelector('i');
@@ -580,9 +562,7 @@
             const input = document.getElementById('auditInput');
             const val = input.value.trim();
             if(!val) return showModal("Required", "Please enter a business type.");
-            
             uiState('audit', true);
-            
             const prompt = `Business: ${val}. Give 3 short, high-impact AI automation strategies. Format as HTML list. No intro.`;
             callGemini(prompt, 'auditResult', 'audit');
         }
@@ -591,9 +571,7 @@
             const input = document.getElementById('contentInput');
             const val = input.value.trim();
             if(!val) return showModal("Required", "Please enter a topic.");
-            
             uiState('content', true);
-            
             const prompt = `Write a short, punchy LinkedIn post about: ${val}. No intro text.`;
             callGemini(prompt, 'contentResult', 'content');
         }
@@ -602,7 +580,6 @@
             const output = document.getElementById(`${type}Output`);
             const loader = document.getElementById(`${type}Loading`);
             const result = document.getElementById(`${type}Result`);
-            
             if(isLoading) {
                 output.classList.remove('hidden');
                 loader.classList.remove('hidden');
@@ -624,12 +601,9 @@
                 );
                 const data = await response.json();
                 const content = data.candidates?.[0]?.content?.parts?.[0]?.text || "Error.";
-                
-                // Simple formatting
                 document.getElementById(targetId).innerHTML = content
                     .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
                     .replace(/\n/g, '<br>');
-                
             } catch(e) {
                 document.getElementById(targetId).innerHTML = "<span class='text-red-400'>Error generating content.</span>";
             } finally {
