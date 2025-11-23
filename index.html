@@ -10,35 +10,38 @@
         /* Apple-style Font Stack */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #000;
-            color: #f5f5f7;
+            background-color: #f0f4f8; /* Light blue-grey base */
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%), 
+                radial-gradient(at 100% 0%, rgba(147, 197, 253, 0.1) 0px, transparent 50%);
+            color: #1e293b; /* Slate 900 */
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- NEW IOS-STYLE LIQUID NAV --- */
+        /* --- LIGHT MODE LIQUID GLASS NAV --- */
         .liquid-glass-nav {
-            /* Extremely low opacity base to let the background shine through */
-            background: rgba(0, 0, 0, 0.1); 
+            /* White base with very low opacity */
+            background: rgba(255, 255, 255, 0.4); 
             
-            /* High blur + Saturation for the "Deep Glass" effect */
-            backdrop-filter: blur(50px) saturate(180%);
-            -webkit-backdrop-filter: blur(50px) saturate(180%);
+            /* High blur + Saturation for the "Ice" effect */
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
             
-            /* REMOVED BORDER. Replaced with subtle inset light to mimic liquid tension */
-            border: none;
-            box-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.05);
+            /* Optical borders for glass realism in light mode */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.9), /* Top highlight */
+                0 4px 30px rgba(0, 0, 0, 0.03); /* Soft shadow */
             
-            /* Smooth transitions */
             transition: background 0.5s ease;
         }
 
-        /* Mobile Menu Glass - Matches the navbar style */
+        /* Mobile Menu Glass */
         .mobile-glass-menu {
-            background: rgba(10, 10, 10, 0.6);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(60px) saturate(200%);
             -webkit-backdrop-filter: blur(60px) saturate(200%);
-            border-bottom: none;
         }
 
         /* Animations */
@@ -53,11 +56,10 @@
             transform: translateY(0);
         }
 
-        /* SLOWER ANIMATIONS ON MOBILE */
         @media (max-width: 768px) {
             .reveal {
-                transition: all 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); /* Much slower, smoother ease */
-                transform: translateY(20px); /* Less movement distance for mobile */
+                transition: all 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
+                transform: translateY(20px);
             }
         }
 
@@ -75,17 +77,61 @@
             animation: float 6s ease-in-out infinite;
         }
 
-        @keyframes slowRotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
+        /* --- NEW CSS-ONLY ROTATING ELEMENT (The "Reactor") --- */
+        .reactor-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .animate-slow-rotate {
-            animation: slowRotate 60s linear infinite;
+
+        .reactor-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(59, 130, 246, 0.1);
         }
+
+        /* Outer Glow Ring */
+        .ring-1 {
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%);
+            animation: spin 20s linear infinite;
+        }
+
+        /* Middle Detail Ring */
+        .ring-2 {
+            width: 70%;
+            height: 70%;
+            border: 1px dashed rgba(59, 130, 246, 0.3);
+            animation: spin-reverse 30s linear infinite;
+        }
+
+        /* Inner Core Gradient */
+        .ring-3 {
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+            filter: blur(20px);
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin-reverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+        @keyframes pulse-glow { 0%, 100% { opacity: 0.5; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
+
 
         /* Gradient Text */
         .text-gradient {
-            background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .text-gradient-dark {
+            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -94,15 +140,19 @@
         .nav-btn {
             position: relative;
             transition: color 0.3s ease;
+            color: #475569;
+        }
+        .nav-btn:hover {
+            color: #0f172a;
         }
         .nav-btn::after {
             content: '';
             position: absolute;
             width: 0;
-            height: 1px;
-            bottom: 0;
+            height: 2px; /* Thicker for light mode */
+            bottom: -2px;
             left: 50%;
-            background-color: white;
+            background-color: #2563eb; /* Blue underline */
             transition: all 0.3s ease;
         }
         .nav-btn:hover::after {
@@ -110,36 +160,59 @@
             left: 0;
         }
 
-        /* Glass Cards */
+        /* Glass Cards - Light Mode */
         .glass-card {
-            background: rgba(30, 30, 35, 0.4);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+            background: rgba(255, 255, 255, 0.65); /* White milky glass */
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.8); /* Crisp white border */
+            box-shadow: 
+                0 10px 30px -10px rgba(59, 130, 246, 0.15), /* Blue tinted shadow */
+                inset 0 0 20px rgba(255, 255, 255, 0.5); /* Inner light */
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            box-shadow: 
+                0 20px 40px -10px rgba(59, 130, 246, 0.25),
+                inset 0 0 0 1px rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.8);
         }
         .glass-card:active {
              transform: scale(0.98);
         }
 
-        /* Hero Glow - Adjusted to sit BEHIND nav */
+        /* Hero Glow - Subtle Blue for White BG */
         .hero-glow {
             position: absolute;
-            top: -100px; /* Pull up to ensure it covers the nav area */
+            top: -150px;
             left: 50%;
             transform: translateX(-50%);
-            width: 140vw;
+            width: 120vw;
             height: 120vh;
-            background: radial-gradient(circle at 50% 40%, rgba(59,130,246,0.18) 0%, rgba(0,0,0,0) 60%);
+            background: radial-gradient(circle at 50% 40%, rgba(59,130,246,0.12) 0%, rgba(255,255,255,0) 65%);
             pointer-events: none;
             z-index: 0;
         }
+        
+        /* Inputs for Light Mode */
+        .input-glass {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #1e293b;
+        }
+        .input-glass::placeholder {
+            color: #94a3b8;
+        }
+        .input-glass:focus {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
     </style>
 </head>
-<body class="antialiased selection:bg-blue-500 selection:text-white">
+<body class="antialiased selection:bg-blue-200 selection:text-blue-900">
 
     <!-- Navigation -->
-    <!-- Nav has no background color class here, relying on custom CSS for liquid effect -->
     <nav class="fixed w-full z-50 liquid-glass-nav top-0 h-16 md:h-20 flex items-center" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div class="flex justify-between items-center">
@@ -147,23 +220,23 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 cursor-pointer active:scale-95 transition-transform" onclick="navigateTo('home')">
                     <img src="ala_bun__1_-removebg.png" alt="Mister C Digital" 
-                         onerror="this.src='https://placehold.co/192x192/1e293b/ffffff?text=MC'"
-                         class="h-8 md:h-10 w-auto object-contain drop-shadow-md">
+                         onerror="this.src='https://placehold.co/192x192/f0f4f8/1e40af?text=MC'"
+                         class="h-8 md:h-10 w-auto object-contain drop-shadow-sm">
                 </div>
                 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center gap-6">
-                    <a href="#" onclick="navigateTo('home'); scrollToSection('services')" class="nav-btn text-sm font-medium text-gray-300 hover:text-white">Services</a>
-                    <a href="#" onclick="navigateTo('home'); scrollToSection('process')" class="nav-btn text-sm font-medium text-gray-300 hover:text-white">Process</a>
+                    <a href="#" onclick="navigateTo('home'); scrollToSection('services')" class="nav-btn text-sm font-semibold">Services</a>
+                    <a href="#" onclick="navigateTo('home'); scrollToSection('process')" class="nav-btn text-sm font-semibold">Process</a>
                     
-                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="ml-4 bg-white text-black px-5 py-2 rounded-full text-xs font-bold hover:bg-gray-200 transition-all transform hover:scale-105">
+                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="ml-4 bg-blue-600 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-[0_4px_14px_0_rgba(37,99,235,0.39)]">
                         Book a Call
                     </a>
                 </div>
 
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-white p-2">
+                    <button id="mobile-menu-btn" class="text-slate-700 p-2">
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
                 </div>
@@ -173,9 +246,9 @@
         <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" class="hidden absolute top-0 left-0 w-full h-screen mobile-glass-menu z-[-1] flex flex-col justify-center items-center">
             <div class="px-6 py-6 space-y-8 text-center">
-                <a href="#" onclick="toggleMobileMenu(); scrollToSection('services')" class="block text-2xl font-medium text-gray-200 hover:text-white">Services</a>
-                <a href="#" onclick="toggleMobileMenu(); scrollToSection('process')" class="block text-2xl font-medium text-gray-200 hover:text-white">Process</a>
-                <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="inline-block mt-4 bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold">Book a Call</a>
+                <a href="#" onclick="toggleMobileMenu(); scrollToSection('services')" class="block text-3xl font-bold text-slate-800 tracking-tight">Services</a>
+                <a href="#" onclick="toggleMobileMenu(); scrollToSection('process')" class="block text-3xl font-bold text-slate-800 tracking-tight">Process</a>
+                <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="inline-block mt-8 bg-blue-600 text-white px-10 py-4 rounded-full text-xl font-bold shadow-xl">Book a Call</a>
             </div>
         </div>
     </nav>
@@ -184,45 +257,49 @@
     <main id="home" class="active relative">
         
         <!-- Hero Section -->
-        <!-- Added pt-24 md:pt-0 to push content down visually but keep bg up -->
         <section class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden">
-            <!-- Glow sits behind everything -->
             <div class="hero-glow"></div>
             
             <div class="max-w-5xl mx-auto w-full flex flex-col items-center justify-center relative z-10 pt-20">
                 
-                <!-- 3D Composition -->
+                <!-- NEW UI/UX THEMED 3D COMPOSITION -->
                 <div class="reveal mb-6 md:mb-8 relative group h-[300px] md:h-[400px] flex items-center justify-center w-full max-w-lg mx-auto">
-                     <div class="absolute top-1/2 left-1/2 w-[350px] h-[350px] md:w-[600px] md:h-[600px] opacity-40 pointer-events-none animate-slow-rotate mix-blend-screen -translate-x-1/2 -translate-y-1/2">
-                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
-                             onerror="this.src='https://placehold.co/600x600/1e293b/ffffff?text='"
-                             alt="" class="w-full h-full object-cover rounded-full blur-2xl">
+                     
+                     <!-- The "Reactor" Background (Replaces Image) -->
+                     <div class="absolute top-1/2 left-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                        <div class="reactor-container opacity-60">
+                            <div class="reactor-ring ring-1"></div>
+                            <div class="reactor-ring ring-2"></div>
+                            <div class="reactor-ring ring-3"></div>
+                        </div>
                      </div>
 
-                     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] md:w-[300px] md:h-[300px] opacity-90 pointer-events-none">
-                         <div class="w-full h-full rounded-full border border-white/10 bg-white/5 backdrop-blur-sm animate-pulse shadow-[0_0_60px_rgba(59,130,246,0.2)]"></div>
+                     <!-- Glass Overlay Circle -->
+                     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] md:w-[280px] md:h-[280px] opacity-100 pointer-events-none">
+                         <div class="w-full h-full rounded-full border border-white/40 bg-white/10 backdrop-blur-sm shadow-[0_0_60px_rgba(59,130,246,0.1)]"></div>
                      </div>
 
+                     <!-- Main Logo -->
                      <img src="ala_bun__1_-removebg.png" alt="Mister C Digital Logo" 
-                          onerror="this.src='https://placehold.co/192x192/1e293b/ffffff?text=MC'"
+                          onerror="this.src='https://placehold.co/192x192/f1f5f9/1e293b?text=MC'"
                           class="relative z-30 h-32 md:h-64 w-auto object-contain drop-shadow-2xl animate-float">
                 </div>
 
                 <!-- Text Content -->
-                <h1 class="reveal reveal-delay-1 text-4xl sm:text-6xl md:text-8xl font-bold tracking-tighter mb-6 leading-tight relative z-20">
+                <h1 class="reveal reveal-delay-1 text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter mb-6 leading-[1.1] relative z-20 text-slate-900">
                     Mister C Digital<br>
-                    <span class="text-2xl sm:text-4xl md:text-5xl font-light text-gray-400 block mt-2 md:mt-4">Automation. Reimagined.</span>
+                    <span class="text-3xl sm:text-4xl md:text-5xl font-light text-slate-400 block mt-2 md:mt-4">Automation. Reimagined.</span>
                 </h1>
 
-                <p class="reveal reveal-delay-2 text-base sm:text-xl text-gray-400 mb-10 max-w-xs sm:max-w-2xl mx-auto font-light leading-relaxed relative z-20">
+                <p class="reveal reveal-delay-2 text-lg sm:text-xl text-slate-500 mb-10 max-w-xs sm:max-w-2xl mx-auto font-normal leading-relaxed relative z-20">
                     We build intelligent AI infrastructures that scale your business while you sleep.
                 </p>
                 
                 <div class="reveal reveal-delay-3 flex flex-col w-full sm:w-auto sm:flex-row gap-4 justify-center items-center relative z-50">
-                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="w-full sm:w-auto bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-blue-500 transition-all shadow-lg hover:shadow-blue-900/50 text-center">
+                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="w-full sm:w-auto bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-700 transition-all shadow-[0_10px_20px_-5px_rgba(37,99,235,0.4)] text-center">
                         Start Transformation
                     </a>
-                    <button onclick="scrollToSection('services')" class="w-full sm:w-auto text-gray-400 hover:text-white flex items-center justify-center gap-2 px-6 py-4 transition-colors rounded-full hover:bg-white/5">
+                    <button onclick="scrollToSection('services')" class="w-full sm:w-auto text-slate-500 hover:text-slate-900 flex items-center justify-center gap-2 px-6 py-4 transition-colors rounded-full hover:bg-slate-100">
                         Learn more <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -234,63 +311,63 @@
         <section id="services" class="py-20 md:py-32 relative z-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal">
-                    <h2 class="text-3xl md:text-6xl font-bold mb-4 tracking-tight">Engineered for Growth.</h2>
-                    <p class="text-gray-400 text-lg max-w-2xl mx-auto font-light">Seamless AI integration for your workflow.</p>
+                    <h2 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight text-slate-900">Engineered for Growth.</h2>
+                    <p class="text-slate-500 text-lg max-w-2xl mx-auto font-normal">Seamless AI integration for your workflow.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto">
                     <!-- Large Card -->
                     <div class="md:col-span-2 row-span-2 glass-card rounded-[2rem] p-6 md:p-14 relative overflow-hidden group reveal">
-                        <div class="absolute -top-10 -right-10 p-8 opacity-10">
-                            <i data-lucide="bot" class="w-40 h-40 md:w-64 md:h-64 text-blue-500"></i>
+                        <div class="absolute -top-10 -right-10 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <i data-lucide="bot" class="w-40 h-40 md:w-64 md:h-64 text-blue-600"></i>
                         </div>
                         <div class="relative z-10">
-                            <div class="w-12 h-12 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center mb-6 backdrop-blur-md">
-                                <i data-lucide="cpu" class="text-blue-400 w-6 h-6"></i>
+                            <div class="w-12 h-12 bg-blue-100 border border-blue-200 rounded-xl flex items-center justify-center mb-6">
+                                <i data-lucide="cpu" class="text-blue-600 w-6 h-6"></i>
                             </div>
-                            <h3 class="text-2xl md:text-4xl font-bold mb-4 text-white">Custom AI Agents</h3>
-                            <p class="text-gray-400 text-base md:text-lg leading-relaxed mb-8 max-w-md">
+                            <h3 class="text-2xl md:text-3xl font-bold mb-4 text-slate-800">Custom AI Agents</h3>
+                            <p class="text-slate-500 text-base md:text-lg leading-relaxed mb-8 max-w-md">
                                 Autonomous agents for support, leads, and data entry. Trained on your business data.
                             </p>
-                            <ul class="space-y-3 text-gray-300 text-sm md:text-base">
-                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-blue-500"></i> 24/7 Customer Support</li>
-                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-blue-500"></i> Instant Lead Qualification</li>
-                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-blue-500"></i> Multi-platform Integration</li>
+                            <ul class="space-y-3 text-slate-600 text-sm md:text-base font-medium">
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-blue-600"></i> 24/7 Customer Support</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-blue-600"></i> Instant Lead Qualification</li>
+                                <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-blue-600"></i> Multi-platform Integration</li>
                             </ul>
                         </div>
                     </div>
 
                     <!-- Small Card 1 -->
                     <div class="glass-card rounded-[2rem] p-6 md:p-10 reveal reveal-delay-1 flex flex-col justify-between h-64 md:h-auto">
-                        <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center mb-4">
-                            <i data-lucide="zap" class="text-indigo-400 w-6 h-6"></i>
+                        <div class="w-12 h-12 bg-indigo-100 border border-indigo-200 rounded-xl flex items-center justify-center mb-4">
+                            <i data-lucide="zap" class="text-indigo-600 w-6 h-6"></i>
                         </div>
                         <div>
-                            <h3 class="text-xl md:text-2xl font-bold mb-2 text-white">Automation</h3>
-                            <p class="text-gray-400 text-sm md:text-base">Connect CRM, Email, and Slack. Kill the "busy work".</p>
+                            <h3 class="text-xl md:text-2xl font-bold mb-2 text-slate-800">Automation</h3>
+                            <p class="text-slate-500 text-sm md:text-base">Connect CRM, Email, and Slack. Kill the "busy work".</p>
                         </div>
                     </div>
 
                     <!-- Small Card 2 -->
                     <div class="glass-card rounded-[2rem] p-6 md:p-10 reveal reveal-delay-2 flex flex-col justify-between h-64 md:h-auto">
-                        <div class="w-12 h-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center mb-4">
-                            <i data-lucide="bar-chart-3" class="text-cyan-400 w-6 h-6"></i>
+                        <div class="w-12 h-12 bg-cyan-100 border border-cyan-200 rounded-xl flex items-center justify-center mb-4">
+                            <i data-lucide="bar-chart-3" class="text-cyan-600 w-6 h-6"></i>
                         </div>
                         <div>
-                            <h3 class="text-xl md:text-2xl font-bold mb-2 text-white">Analytics</h3>
-                            <p class="text-gray-400 text-sm md:text-base">Real-time dashboards from raw data automatically.</p>
+                            <h3 class="text-xl md:text-2xl font-bold mb-2 text-slate-800">Analytics</h3>
+                            <p class="text-slate-500 text-sm md:text-base">Real-time dashboards from raw data automatically.</p>
                         </div>
                     </div>
                     
                     <!-- Wide Card -->
                     <div class="md:col-span-3 glass-card rounded-[2rem] p-6 md:p-14 flex flex-col md:flex-row items-start md:items-center justify-between reveal gap-6">
                         <div class="flex-1">
-                            <h3 class="text-xl md:text-3xl font-bold mb-2 md:mb-4 text-white">Content at Scale</h3>
-                            <p class="text-gray-400 text-sm md:text-lg max-w-3xl">
+                            <h3 class="text-xl md:text-3xl font-bold mb-2 md:mb-4 text-slate-800">Content at Scale</h3>
+                            <p class="text-slate-500 text-sm md:text-lg max-w-3xl">
                                 SEO blogs, social posts, and newsletters that sound like you, on autopilot.
                             </p>
                         </div>
-                        <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="w-full md:w-auto text-center bg-blue-600 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg">
+                        <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="w-full md:w-auto text-center bg-blue-600 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg hover:bg-blue-700 transition-colors">
                             See it in action
                         </a>
                     </div>
@@ -299,95 +376,95 @@
         </section>
 
         <!-- Process Section -->
-        <section id="process" class="py-20 md:py-32 border-t border-white/5 relative z-10">
+        <section id="process" class="py-20 md:py-32 border-t border-slate-200 relative z-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal">
-                    <h2 class="text-3xl md:text-6xl font-bold mb-4 tracking-tight">The Process.</h2>
+                    <h2 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight text-slate-900">The Process.</h2>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
                     <!-- Line -->
-                    <div class="hidden md:block absolute top-[3rem] left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 z-0"></div>
+                    <div class="hidden md:block absolute top-[3rem] left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-slate-200 via-blue-200 to-slate-200 z-0"></div>
 
                     <!-- Steps -->
                     <div class="text-center reveal reveal-delay-1 relative z-10">
-                        <div class="w-24 h-24 mx-auto bg-black rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-gray-500 border-4 border-gray-900 shadow-xl">1</div>
-                        <h3 class="text-xl font-bold mb-2 text-white">Audit</h3>
-                        <p class="text-gray-400 text-sm px-4">We dissect your workflows to find automation opportunities.</p>
+                        <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-slate-400 border-4 border-slate-100 shadow-xl">1</div>
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Audit</h3>
+                        <p class="text-slate-500 text-sm px-4">We dissect your workflows to find automation opportunities.</p>
                     </div>
                     <div class="text-center reveal reveal-delay-2 relative z-10">
-                        <div class="w-24 h-24 mx-auto bg-black rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-blue-400 border-4 border-blue-600 shadow-[0_0_40px_rgba(37,99,235,0.3)]">2</div>
-                        <h3 class="text-xl font-bold mb-2 text-white">Build</h3>
-                        <p class="text-gray-400 text-sm px-4">We custom build your agents and connect your software.</p>
+                        <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-blue-600 border-4 border-blue-500 shadow-[0_0_40px_rgba(37,99,235,0.2)]">2</div>
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Build</h3>
+                        <p class="text-slate-500 text-sm px-4">We custom build your agents and connect your software.</p>
                     </div>
                     <div class="text-center reveal reveal-delay-3 relative z-10">
-                        <div class="w-24 h-24 mx-auto bg-black rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-gray-500 border-4 border-gray-900 shadow-xl">3</div>
-                        <h3 class="text-xl font-bold mb-2 text-white">Scale</h3>
-                        <p class="text-gray-400 text-sm px-4">Launch, monitor, and optimize for peak performance.</p>
+                        <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center mb-6 text-2xl font-bold text-slate-400 border-4 border-slate-100 shadow-xl">3</div>
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Scale</h3>
+                        <p class="text-slate-500 text-sm px-4">Launch, monitor, and optimize for peak performance.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- AI PLAYGROUND -->
-        <section id="playground" class="py-20 md:py-32 relative z-20 border-t border-white/5 bg-black/50">
+        <section id="playground" class="py-20 md:py-32 relative z-20 border-t border-slate-200 bg-white/50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal">
-                    <span class="inline-block py-1 px-3 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-400 text-[10px] font-bold uppercase tracking-wider mb-4">
+                    <span class="inline-block py-1 px-3 rounded-full bg-purple-100 border border-purple-200 text-purple-600 text-[10px] font-bold uppercase tracking-wider mb-4">
                         Live Demo
                     </span>
-                    <h2 class="text-3xl md:text-6xl font-bold mb-4 tracking-tight">Experience AI</h2>
-                    <p class="text-gray-400 text-lg max-w-2xl mx-auto font-light">Test drive our intelligence engine.</p>
+                    <h2 class="text-3xl md:text-6xl font-bold mb-4 tracking-tight text-slate-900">Experience AI</h2>
+                    <p class="text-slate-500 text-lg max-w-2xl mx-auto font-normal">Test drive our intelligence engine.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                     
                     <!-- Audit Tool -->
                     <div class="glass-card rounded-[2rem] p-6 md:p-12 reveal relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                            <i data-lucide="brain-circuit" class="w-32 h-32 text-purple-500"></i>
+                        <div class="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
+                            <i data-lucide="brain-circuit" class="w-32 h-32 text-purple-600"></i>
                         </div>
                         <div class="relative z-10">
                             <div class="flex items-center gap-4 mb-6">
-                                <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-400">
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600">
                                     <i data-lucide="lightbulb" class="w-5 h-5"></i>
                                 </div>
-                                <h3 class="text-xl md:text-2xl font-bold text-white">Strategy Audit</h3>
+                                <h3 class="text-xl md:text-2xl font-bold text-slate-800">Strategy Audit</h3>
                             </div>
-                            <p class="text-gray-400 mb-6 text-sm">Instant automation suggestions for your niche.</p>
+                            <p class="text-slate-500 mb-6 text-sm">Instant automation suggestions for your niche.</p>
                             <input type="text" id="auditInput" placeholder="e.g. Real Estate, Dentist..." 
-                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 mb-4 text-sm">
-                            <button onclick="generateAudit()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg text-sm">
+                                class="w-full input-glass rounded-xl px-4 py-3 mb-4 text-sm outline-none transition-all">
+                            <button onclick="generateAudit()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg text-sm">
                                 Generate Audit
                             </button>
-                            <div id="auditOutput" class="hidden mt-6 p-4 bg-black/40 rounded-xl border border-white/10">
-                                <div id="auditLoading" class="hidden flex items-center justify-center gap-2 text-purple-400 text-sm"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Analyzing...</div>
-                                <div id="auditResult" class="text-gray-300 text-sm leading-relaxed space-y-2"></div>
+                            <div id="auditOutput" class="hidden mt-6 p-4 bg-white/60 rounded-xl border border-white">
+                                <div id="auditLoading" class="hidden flex items-center justify-center gap-2 text-purple-600 text-sm"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Analyzing...</div>
+                                <div id="auditResult" class="text-slate-700 text-sm leading-relaxed space-y-2"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Content Tool -->
                     <div class="glass-card rounded-[2rem] p-6 md:p-12 reveal reveal-delay-1 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                            <i data-lucide="pen-tool" class="w-32 h-32 text-pink-500"></i>
+                        <div class="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
+                            <i data-lucide="pen-tool" class="w-32 h-32 text-pink-600"></i>
                         </div>
                         <div class="relative z-10">
                             <div class="flex items-center gap-4 mb-6">
-                                <div class="w-10 h-10 bg-pink-500/20 rounded-lg flex items-center justify-center text-pink-400">
+                                <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center text-pink-600">
                                     <i data-lucide="share-2" class="w-5 h-5"></i>
                                 </div>
-                                <h3 class="text-xl md:text-2xl font-bold text-white">Viral Post Gen</h3>
+                                <h3 class="text-xl md:text-2xl font-bold text-slate-800">Viral Post Gen</h3>
                             </div>
-                            <p class="text-gray-400 mb-6 text-sm">Generate a LinkedIn post on any topic.</p>
+                            <p class="text-slate-500 mb-6 text-sm">Generate a LinkedIn post on any topic.</p>
                             <input type="text" id="contentInput" placeholder="e.g. Remote work, AI Marketing..." 
-                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-pink-500 mb-4 text-sm">
-                            <button onclick="generateContent()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg text-sm">
+                                class="w-full input-glass rounded-xl px-4 py-3 mb-4 text-sm outline-none transition-all">
+                            <button onclick="generateContent()" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg text-sm">
                                 Generate Post
                             </button>
-                            <div id="contentOutput" class="hidden mt-6 p-4 bg-black/40 rounded-xl border border-white/10">
-                                <div id="contentLoading" class="hidden flex items-center justify-center gap-2 text-pink-400 text-sm"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Writing...</div>
-                                <div id="contentResult" class="text-gray-300 text-sm leading-relaxed space-y-2 whitespace-pre-wrap"></div>
+                            <div id="contentOutput" class="hidden mt-6 p-4 bg-white/60 rounded-xl border border-white">
+                                <div id="contentLoading" class="hidden flex items-center justify-center gap-2 text-pink-600 text-sm"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Writing...</div>
+                                <div id="contentResult" class="text-slate-700 text-sm leading-relaxed space-y-2 whitespace-pre-wrap"></div>
                             </div>
                         </div>
                     </div>
@@ -395,8 +472,8 @@
                 
                 <!-- Final CTA -->
                 <div class="text-center mt-20 md:mt-32 reveal px-4">
-                    <h2 class="text-2xl md:text-4xl font-bold mb-4 text-gradient">Ready to automate?</h2>
-                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="inline-block bg-white text-black px-8 py-3 rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-lg">
+                    <h2 class="text-2xl md:text-4xl font-bold mb-4 text-slate-800">Ready to automate?</h2>
+                    <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-bold hover:scale-105 transition-transform shadow-lg hover:shadow-blue-500/50">
                         Book Your Free Call
                     </a>
                 </div>
@@ -404,17 +481,17 @@
         </section>
 
         <!-- Footer -->
-        <footer class="py-12 border-t border-white/10 bg-black text-center text-gray-600 text-xs md:text-sm">
+        <footer class="py-12 border-t border-slate-200 bg-slate-50 text-center text-slate-400 text-xs md:text-sm">
             <p>&copy; 2025 Mister C Digital.</p>
         </footer>
     </main>
 
     <!-- Modal -->
-    <div id="customModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] hidden items-center justify-center p-4" onclick="closeModal()">
-        <div class="bg-[#1c1c1e] border border-gray-700 rounded-2xl p-6 max-w-sm w-full shadow-2xl" onclick="event.stopPropagation()">
-            <h4 id="modalTitle" class="text-lg font-bold text-white mb-2">Notice</h4>
-            <p id="modalMessage" class="text-gray-400 mb-6 text-sm">Message content.</p>
-            <button onclick="closeModal()" class="w-full bg-[#2c2c2e] hover:bg-[#3a3a3c] text-blue-500 py-3 rounded-xl font-semibold transition-colors">Close</button>
+    <div id="customModal" class="fixed inset-0 bg-black/20 backdrop-blur-md z-[9999] hidden items-center justify-center p-4" onclick="closeModal()">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-sm w-full shadow-2xl" onclick="event.stopPropagation()">
+            <h4 id="modalTitle" class="text-lg font-bold text-slate-900 mb-2">Notice</h4>
+            <p id="modalMessage" class="text-slate-500 mb-6 text-sm">Message content.</p>
+            <button onclick="closeModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-blue-600 py-3 rounded-xl font-semibold transition-colors">Close</button>
         </div>
     </div>
 
