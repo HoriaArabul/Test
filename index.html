@@ -643,6 +643,388 @@
             }
         }
     </script>
+    <!-- Liquid Glass GDPR banner (paste before </body>) -->
+<style>
+  :root{
+    --lg-accent: 150 80% 60%; /* hue saturation lightness for accent (HSL) used with HSL syntax in JS/CSS */
+    --lg-bg: rgba(255,255,255,0.06);
+    --lg-border: rgba(255,255,255,0.14);
+    --lg-text: #f7f7fb;
+    --lg-muted: rgba(247,247,251,0.75);
+    --lg-radius: 14px;
+    --lg-z: 99999;
+    --lg-width: min(980px, calc(100% - 48px));
+    --lg-blur: 10px;
+    --lg-transition: 320ms cubic-bezier(.2,.9,.3,1);
+  }
+
+  /* Banner wrapper */
+  #lg-gdpr {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%) translateY(30px);
+    bottom: 28px;
+    width: var(--lg-width);
+    z-index: var(--lg-z);
+    pointer-events: auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+    padding: 18px;
+    box-sizing: border-box;
+    border-radius: var(--lg-radius);
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    border: 1px solid var(--lg-border);
+    color: var(--lg-text);
+    backdrop-filter: blur(var(--lg-blur)) saturate(120%);
+    -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(120%);
+    box-shadow:
+      0 10px 30px rgba(0,0,0,0.45),
+      inset 0 1px 0 rgba(255,255,255,0.03);
+    opacity: 0;
+    transform-origin: bottom center;
+    transition: opacity var(--lg-transition), transform var(--lg-transition);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    gap: 20px;
+  }
+
+  #lg-gdpr.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Left: message */
+  #lg-gdpr .lg-message {
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    min-width: 0;
+  }
+  #lg-gdpr .lg-icon {
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex: 0 0 48px;
+    background: linear-gradient(135deg, rgba(var(--lg-accent), 0.14), rgba(255,255,255,0.02));
+    box-shadow: 0 4px 18px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: hsl(var(--lg-accent));
+    font-weight:700;
+    font-size:18px;
+  }
+
+  #lg-gdpr .lg-texts {
+    min-width: 0;
+  }
+  #lg-gdpr .lg-title {
+    font-size:15px;
+    font-weight:600;
+    margin:0 0 6px 0;
+    color:var(--lg-text);
+    line-height:1.2;
+  }
+  #lg-gdpr .lg-desc {
+    margin:0;
+    font-size:13px;
+    color:var(--lg-muted);
+    line-height:1.35;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  #lg-gdpr .lg-desc a{
+    color: hsl(var(--lg-accent));
+    text-decoration: underline;
+  }
+
+  /* Right: actions */
+  #lg-gdpr .lg-actions {
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+
+  .lg-btn {
+    -webkit-tap-highlight-color: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 10px 14px;
+    min-height:40px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(180deg, color-mix(in srgb, hsl(var(--lg-accent)) 18%, transparent), rgba(0,0,0,0.06));
+    box-shadow: 0 6px 18px rgba(17,12,35,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+    transition: transform 220ms ease, box-shadow 220ms ease, opacity 220ms;
+  }
+  .lg-btn:active { transform: translateY(1px) scale(0.997); }
+  .lg-btn:focus { outline: 3px solid color-mix(in srgb, hsl(var(--lg-accent)) 30%, transparent); outline-offset: 2px; }
+
+  .lg-btn.ghost {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color: var(--lg-text);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: none;
+    font-weight:600;
+  }
+
+  .lg-small {
+    padding: 8px 12px;
+    min-height:36px;
+    border-radius:9px;
+    font-size:13px;
+  }
+
+  /* Settings modal (simple) */
+  #lg-settings {
+    position: fixed;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%) scale(.98);
+    width: min(680px, calc(100% - 48px));
+    z-index: calc(var(--lg-z) + 10);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 14px;
+    border:1px solid rgba(255,255,255,0.08);
+    padding: 20px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    color: var(--lg-text);
+    backdrop-filter: blur(12px) saturate(120%);
+    display: none;
+  }
+  #lg-settings.open { display:block; }
+
+  #lg-settings h3 { margin:0 0 12px 0; font-size:16px; font-weight:700; }
+  .lg-category { display:flex; align-items:center; justify-content:space-between; padding:12px; border-radius:10px; margin-bottom:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid rgba(255,255,255,0.02); }
+  .lg-category .cat-info { max-width:72%; }
+  .lg-category .cat-info b{ display:block; font-size:14px; margin-bottom:4px; }
+  .lg-toggle { display:flex; gap:8px; align-items:center; }
+
+  /* tiny helper for small screens */
+  @media (max-width:720px){
+    #lg-gdpr { grid-template-columns: 1fr; left:50%; transform: translateX(-50%) translateY(20px); padding:14px; gap:12px; bottom:18px; }
+    #lg-gdpr .lg-actions { justify-content:flex-end; width:100%; }
+  }
+</style>
+
+<div id="lg-gdpr" role="dialog" aria-live="polite" aria-label="Cookie consent" aria-modal="false" hidden>
+  <div class="lg-message">
+    <div class="lg-icon" aria-hidden="true">🍪</div>
+    <div class="lg-texts">
+      <h4 class="lg-title">We use cookies to improve your experience</h4>
+      <p class="lg-desc">
+        We and our partners use cookies for analytics, personalization and targeted ads. By clicking “Accept” you consent to this. Manage your preferences or read our
+        <a href="#" id="lg-privacy-link" target="_blank" rel="noopener">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="lg-actions" role="group" aria-label="cookie actions">
+    <button class="lg-btn ghost lg-small" id="lg-decline">Decline</button>
+    <button class="lg-btn ghost lg-small" id="lg-settings-btn" aria-haspopup="dialog" aria-controls="lg-settings">Settings</button>
+    <button class="lg-btn lg-small" id="lg-accept" style="background: linear-gradient(180deg, hsl(var(--lg-accent) / 0.98), hsl(var(--lg-accent) / 0.82));">Accept</button>
+  </div>
+</div>
+
+<!-- Settings sheet -->
+<div id="lg-settings" role="dialog" aria-modal="true" aria-hidden="true">
+  <h3>Cookie preferences</h3>
+  <p style="margin:0 0 12px 0; color:var(--lg-muted); font-size:13px;">Select the types of cookies you allow.</p>
+
+  <div class="lg-category" data-key="essential">
+    <div class="cat-info">
+      <b>Essential cookies</b>
+      <div style="font-size:13px; color:var(--lg-muted);">Required for site functionality. Always active.</div>
+    </div>
+    <div class="lg-toggle">
+      <input type="checkbox" disabled checked aria-label="Essential cookies enabled">
+    </div>
+  </div>
+
+  <div class="lg-category" data-key="analytics">
+    <div class="cat-info">
+      <b>Analytics</b>
+      <div style="font-size:13px; color:var(--lg-muted);">Help us understand usage so we can improve the site.</div>
+    </div>
+    <div class="lg-toggle">
+      <input type="checkbox" id="lg-analytics-toggle" aria-label="Toggle analytics cookies">
+    </div>
+  </div>
+
+  <div class="lg-category" data-key="marketing">
+    <div class="cat-info">
+      <b>Marketing & personalization</b>
+      <div style="font-size:13px; color:var(--lg-muted);">Used for personalized ads and offers.</div>
+    </div>
+    <div class="lg-toggle">
+      <input type="checkbox" id="lg-marketing-toggle" aria-label="Toggle marketing cookies">
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:14px;">
+    <button class="lg-btn ghost lg-small" id="lg-cancel-settings">Cancel</button>
+    <button class="lg-btn lg-small" id="lg-save-settings" style="background: linear-gradient(180deg, hsl(var(--lg-accent) / 0.98), hsl(var(--lg-accent) / 0.82));">Save preferences</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const privacyUrl = "https://ai.mistercdigital.com/politica-de-confidentialitate" /* change if needed */;
+  const cookieName = "lg_gdpr_consent_v1";
+  const expireDays = 180;
+
+  const banner = document.getElementById('lg-gdpr');
+  const settings = document.getElementById('lg-settings');
+  const acceptBtn = document.getElementById('lg-accept');
+  const declineBtn = document.getElementById('lg-decline');
+  const settingsBtn = document.getElementById('lg-settings-btn');
+  const privacyLink = document.getElementById('lg-privacy-link');
+
+  privacyLink.href = privacyUrl;
+
+  function setCookie(name, value, days){
+    const d = new Date();
+    d.setTime(d.getTime() + (days*24*60*60*1000));
+    document.cookie = name + "=" + encodeURIComponent(value) + ";path=/;SameSite=Lax;expires=" + d.toUTCString();
+  }
+  function getCookie(name){
+    const re = new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()[]\\\/+^])/g,'\\$1') + '=([^;]*)');
+    const m = document.cookie.match(re);
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+
+  function showBanner(){
+    banner.hidden = false;
+    // small timeout to allow transition
+    requestAnimationFrame(()=> banner.classList.add('show'));
+  }
+  function hideBanner(){
+    banner.classList.remove('show');
+    setTimeout(()=> banner.hidden = true, 320);
+  }
+
+  // Save consent object: {essential: true, analytics: bool, marketing: bool, timestamp}
+  function saveConsent(obj){
+    obj.timestamp = new Date().toISOString();
+    setCookie(cookieName, JSON.stringify(obj), expireDays);
+  }
+
+  function readConsent(){
+    try {
+      const raw = getCookie(cookieName);
+      if(!raw) return null;
+      return JSON.parse(raw);
+    } catch(e){
+      return null;
+    }
+  }
+
+  // Hook placeholders — put your actual init/disable logic here
+  function onAccept(consent){
+    // Consent accepted — enable services according to consent
+    // Example:
+    if(consent.analytics){
+      // init your analytics here, e.g. loadGA();
+    }
+    if(consent.marketing){
+      // init marketing pixels here
+    }
+    // You can dispatch a custom event so other scripts can respond:
+    window.dispatchEvent(new CustomEvent('lg.gdpr.accept', {detail: consent}));
+  }
+
+  function onDecline(){
+    // User declined non-essential cookies — ensure you disable trackers
+    window.dispatchEvent(new CustomEvent('lg.gdpr.decline'));
+  }
+
+  // Buttons
+  acceptBtn.addEventListener('click', ()=> {
+    const consent = { essential: true, analytics: true, marketing: true };
+    saveConsent(consent);
+    onAccept(consent);
+    hideBanner();
+  });
+
+  declineBtn.addEventListener('click', ()=> {
+    const consent = { essential: true, analytics: false, marketing: false };
+    saveConsent(consent);
+    onDecline();
+    hideBanner();
+  });
+
+  settingsBtn.addEventListener('click', ()=> {
+    // show settings sheet
+    settings.classList.add('open');
+    settings.setAttribute('aria-hidden', 'false');
+    // load toggles from existing cookie if present
+    const current = readConsent();
+    document.getElementById('lg-analytics-toggle').checked = current ? !!current.analytics : false;
+    document.getElementById('lg-marketing-toggle').checked = current ? !!current.marketing : false;
+  });
+
+  document.getElementById('lg-cancel-settings').addEventListener('click', ()=> {
+    settings.classList.remove('open');
+    settings.setAttribute('aria-hidden', 'true');
+  });
+
+  document.getElementById('lg-save-settings').addEventListener('click', ()=> {
+    const analytics = !!document.getElementById('lg-analytics-toggle').checked;
+    const marketing = !!document.getElementById('lg-marketing-toggle').checked;
+    const consent = { essential: true, analytics, marketing };
+    saveConsent(consent);
+    if(analytics || marketing){
+      onAccept(consent);
+    } else {
+      onDecline();
+    }
+    settings.classList.remove('open');
+    settings.setAttribute('aria-hidden', 'true');
+    hideBanner();
+  });
+
+  // If cookie present, do not show banner but trigger appropriate callbacks on page load
+  const existing = readConsent();
+  if(existing){
+    // Respect stored preferences immediately
+    if(existing.analytics || existing.marketing){
+      onAccept(existing);
+    } else {
+      onDecline();
+    }
+    // no banner
+  } else {
+    // show banner after tiny delay so page visuals settle
+    setTimeout(showBanner, 220);
+  }
+
+  // Accessibility: close settings with Escape
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){
+      if(settings.classList.contains('open')){
+        settings.classList.remove('open');
+        settings.setAttribute('aria-hidden', 'true');
+      }
+    }
+  });
+
+  // Expose a small API
+  window.LG_GDPR = {
+    getConsent: readConsent,
+    openSettings: ()=> settings.classList.add('open'),
+    revokeConsent: ()=> {
+      // delete cookie by setting expiry in past
+      document.cookie = cookieName + "=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      showBanner();
+      window.dispatchEvent(new CustomEvent('lg.gdpr.revoked'));
+    }
+  };
+})();
+</script>
 </body>
 </html>
 </body>
