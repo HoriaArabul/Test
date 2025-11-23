@@ -5,229 +5,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mister C Digital | AI Automations</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Icons --><script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* Apple-style Font Stack */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f8fafc; /* Very light slate */
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%), 
-                radial-gradient(at 100% 100%, rgba(147, 197, 253, 0.15) 0px, transparent 50%);
-            color: #0f172a; /* Slate 900 */
+            /* Vibrant Blue from Logo */
+            background-color: #3b82f6; 
+            color: #0f172a; 
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* --- BACKGROUND ANIMATION (The Swoosh) --- */
+        .bg-wipe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -50;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .white-wipe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f8fafc;
+            
+            /* DESKTOP SHAPE: Diagonal cut leaving blue on left */
+            clip-path: polygon(35% 0, 100% 0, 100% 100%, 15% 100%);
+            
+            transform: translateX(100%); 
+            animation: swoosh-enter 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation-delay: 0.2s; 
+            box-shadow: -20px 0 50px rgba(0,0,0,0.1);
+        }
+
+        /* --- MOBILE FIX: Make "Less Blue" / More Readable --- */
+        @media (max-width: 768px) {
+            .white-wipe {
+                /* This covers almost the entire screen with white, leaving just 
+                   a tiny sliver of blue at the top left for style, 
+                   ensuring text is readable. */
+                clip-path: polygon(5% 0, 100% 0, 100% 100%, 0% 100%);
+            }
+        }
+
+        @keyframes swoosh-enter {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(0); }
         }
 
         /* --- NAVBAR GLASS --- */
         .liquid-glass-nav {
-            background: rgba(255, 255, 255, 0.1); /* Clearer base */
+            background: rgba(255, 255, 255, 0.1); 
             backdrop-filter: blur(12px) saturate(120%);
             -webkit-backdrop-filter: blur(12px) saturate(120%);
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             border-top: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 
-                inset 0 1px 1px rgba(255, 255, 255, 0.9),
-                0 4px 20px -5px rgba(0, 0, 0, 0.05); /* Softer shadow */
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9);
             transition: all 0.3s ease;
         }
 
-        /* --- NEW PROFESSIONAL LIQUID BUTTONS (Gemstone Style) --- */
+        /* --- BUTTONS --- */
         .btn-liquid {
             position: relative;
-            background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%); /* Clean Gradient */
+            background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%); 
             color: white;
             border: none;
-            /* The "Glass" Definition */
             box-shadow: 
-                /* Sharp Top Reflection (The "Wet" look) */
-                inset 0 2px 1px rgba(255, 255, 255, 0.5), 
-                /* Bottom Depth */
+                inset 0 2px 1px rgba(255, 255, 255, 0.6),
                 inset 0 -4px 6px rgba(0, 0, 0, 0.1),
-                /* Drop Shadow */
-                0 4px 10px rgba(37, 99, 235, 0.3);
+                0 4px 10px rgba(37, 99, 235, 0.4);
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             z-index: 10;
         }
-
-        /* Removed the blurry ::before element completely */
-
         .btn-liquid:hover {
             transform: translateY(-2px) scale(1.02);
-            background: linear-gradient(180deg, #4f93f6 0%, #3b82f6 100%); /* Slightly lighter on hover */
+            background: linear-gradient(180deg, #93c5fd 0%, #3b82f6 100%);
             box-shadow: 
-                /* Intensified Top Reflection */
-                inset 0 3px 2px rgba(255, 255, 255, 0.7),
-                /* Deeper Bottom shading */
+                inset 0 3px 2px rgba(255, 255, 255, 0.8),
                 inset 0 -4px 12px rgba(0, 0, 0, 0.15),
-                /* Outer Glow */
-                0 10px 25px -5px rgba(37, 99, 235, 0.5);
+                0 10px 25px -5px rgba(37, 99, 235, 0.6);
         }
-        
-        .btn-liquid:active {
-            transform: translateY(0) scale(0.98);
-        }
+        .btn-liquid:active { transform: translateY(0) scale(0.98); }
 
-        /* --- NAVBAR TEXT BUTTONS (Tinted Liquid) --- */
+        /* --- NAV LINKS --- */
         .nav-link {
             position: relative;
-            padding: 8px 18px;
+            padding: 8px 12px;
             border-radius: 99px;
             transition: all 0.3s ease;
             font-weight: 500;
             color: #475569;
-            border: 1px solid transparent; /* Prevents layout shift */
+            font-size: 0.9rem;
         }
-        
         .nav-link:hover {
-            color: #1e40af; /* Darker Blue Text */
-            /* Tinted Water Background */
+            color: #1e40af; 
             background: rgba(59, 130, 246, 0.08); 
-            /* Glass Borders */
-            border-color: rgba(59, 130, 246, 0.2);
-            /* Specular Highlights for Visibility */
-            box-shadow: 
-                inset 0 1px 0 rgba(255, 255, 255, 0.9), /* Sharp top shine */
-                0 4px 10px rgba(59, 130, 246, 0.1);
         }
 
-        /* --- MOBILE MENU GLASS --- */
+        /* --- MOBILE MENU --- */
         .mobile-glass-container {
             position: absolute;
             top: 80px; 
             left: 0;
             width: 100%;
-            height: auto;
-            min-height: 400px;
-            background: rgba(240, 244, 248, 0.95); /* Slightly more opaque for readability */
+            height: 100vh; /* Full height */
+            background: rgba(248, 250, 252, 0.98); /* Solid clean background */
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transform-origin: top;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding-top: 40px;
-            z-index: 40;
+            padding-top: 20px;
+            z-index: 999;
+            overflow-y: auto;
+            padding-bottom: 100px;
         }
 
         .mobile-menu-btn-item {
-            width: 80%;
-            padding: 16px 24px;
-            margin-bottom: 16px;
-            border-radius: 20px;
+            width: 85%;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border-radius: 16px;
             text-align: center;
-            font-weight: 700;
-            font-size: 1.1rem;
+            font-weight: 600;
+            font-size: 1rem;
             color: #334155;
-            background: rgba(255, 255, 255, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             transition: all 0.2s ease;
         }
-
-        .mobile-menu-btn-item:active, .mobile-menu-btn-item:hover {
-            background: rgba(255, 255, 255, 0.9);
+        .mobile-menu-btn-item:active {
+            background: #eff6ff;
+            border-color: #3b82f6;
             transform: scale(0.98);
-            color: #2563eb;
-            box-shadow: 
-                inset 0 0 15px rgba(37, 99, 235, 0.1),
-                0 2px 5px rgba(0,0,0,0.05);
-            border-color: #2563eb;
         }
 
         /* Animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-
-        /* Reactor (Background) */
+        
+        /* Reactor */
         .reactor-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
         .reactor-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(59, 130, 246, 0.1); }
         .ring-1 { width: 100%; height: 100%; background: conic-gradient(from 0deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%); animation: spin 20s linear infinite; }
         .ring-2 { width: 70%; height: 70%; border: 1px dashed rgba(59, 130, 246, 0.3); animation: spin-reverse 30s linear infinite; }
         .ring-3 { width: 50%; height: 50%; background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%); filter: blur(20px); animation: pulse-glow 4s ease-in-out infinite; }
-
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes spin-reverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
         @keyframes pulse-glow { 0%, 100% { opacity: 0.5; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
 
-        /* Glass Cards */
+        /* Cards */
         .glass-card {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 
-                0 10px 40px -10px rgba(59, 130, 246, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.1);
+            transition: transform 0.4s, box-shadow 0.3s;
         }
         .glass-card:hover {
-            box-shadow: 
-                0 25px 50px -12px rgba(59, 130, 246, 0.2),
-                inset 0 0 20px rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.7);
-            border-color: #fff;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.2);
         }
-
         .hero-glow {
-            position: absolute;
-            top: -150px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120vw;
-            height: 120vh;
-            background: radial-gradient(circle at 50% 40%, rgba(59,130,246,0.1) 0%, rgba(255,255,255,0) 65%);
-            pointer-events: none;
-            z-index: 0;
+            position: absolute; top: -150px; left: 50%; transform: translateX(-50%);
+            width: 120vw; height: 120vh;
+            background: radial-gradient(circle at 50% 40%, rgba(59,130,246,0.15) 0%, rgba(255,255,255,0) 65%);
+            pointer-events: none; z-index: 0;
         }
-        
         .input-glass {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(203, 213, 225, 0.5);
-            color: #1e293b;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(203, 213, 225, 0.5);
+            color: #1e293b; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
-        .input-glass:focus {
-            background: #fff;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-        }
+        .input-glass:focus { background: #fff; border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
     </style>
 </head>
 <body class="antialiased selection:bg-blue-100 selection:text-blue-900">
 
-    <!-- Navigation -->
+    <div class="bg-wipe-container">
+        <div class="white-wipe"></div>
+    </div>
+
     <nav class="fixed w-full z-50 liquid-glass-nav top-0 h-20 flex items-center transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-50">
             <div class="flex justify-between items-center h-full">
                 
-                <!-- Logo -->
                 <div class="flex-shrink-0 cursor-pointer active:scale-95 transition-transform" onclick="navigateTo('home')">
                     <img src="ala_bun__1_-removebg.png" alt="Mister C Digital" 
                          onerror="this.src='https://placehold.co/192x192/f0f4f8/1e40af?text=MC'"
                          class="h-10 w-auto object-contain drop-shadow-sm">
                 </div>
                 
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2">
                     <a href="#" onclick="navigateTo('home'); scrollToSection('services')" class="nav-link text-sm">Services</a>
                     <a href="#" onclick="navigateTo('home'); scrollToSection('process')" class="nav-link text-sm">Process</a>
+                    <a href="terms.html" class="nav-link text-xs text-slate-400 hover:text-blue-600">Terms</a>
+                    <a href="privacy.html" class="nav-link text-xs text-slate-400 hover:text-blue-600">Privacy</a>
                     
                     <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="ml-4 btn-liquid px-6 py-2.5 rounded-full text-xs font-bold tracking-wide uppercase">
                         Book a Call
                     </a>
                 </div>
 
-                <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-slate-700 p-2 hover:bg-white/20 rounded-full transition-colors relative z-50">
                         <i data-lucide="menu" class="w-7 h-7"></i>
@@ -236,27 +226,32 @@
             </div>
         </div>
 
-        <!-- Mobile Menu Dropdown (Liquid Style) -->
         <div id="mobile-menu" class="hidden mobile-glass-container">
-            <a href="#" onclick="toggleMobileMenu(); scrollToSection('services')" class="mobile-menu-btn-item">Services</a>
-            <a href="#" onclick="toggleMobileMenu(); scrollToSection('process')" class="mobile-menu-btn-item">Process</a>
-            <div class="w-4/5 h-px bg-slate-300/50 my-4"></div>
-            <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="mobile-menu-btn-item" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; border-color: rgba(37, 99, 235, 0.3);">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Menu</span>
+            
+            <button onclick="handleMobileNav('services')" class="mobile-menu-btn-item">Services</button>
+            <button onclick="handleMobileNav('process')" class="mobile-menu-btn-item">Process</button>
+            
+            <div class="w-4/5 h-px bg-slate-200 my-4"></div>
+            
+            <a href="terms.html" class="mobile-menu-btn-item text-sm">Terms of Service</a>
+            <a href="privacy.html" class="mobile-menu-btn-item text-sm">Privacy Policy</a>
+
+            <div class="w-4/5 h-px bg-slate-200 my-4"></div>
+
+            <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="mobile-menu-btn-item" style="background: #eff6ff; color: #2563eb; border-color: #bfdbfe;">
                 Book a Call
             </a>
         </div>
     </nav>
 
-    <!-- MAIN LANDING PAGE -->
     <main id="home" class="active relative">
         
-        <!-- Hero Section -->
         <section class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden pt-20">
             <div class="hero-glow"></div>
             
             <div class="max-w-5xl mx-auto w-full flex flex-col items-center justify-center relative z-10">
                 
-                <!-- Reactor & Logo -->
                 <div class="reveal mb-8 relative group h-[300px] md:h-[400px] flex items-center justify-center w-full max-w-lg mx-auto">
                      <div class="absolute top-1/2 left-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                         <div class="reactor-container opacity-50">
@@ -294,8 +289,7 @@
             </div>
         </section>
 
-        <!-- Bento Grid Services -->
-        <section id="services" class="py-20 md:py-32 relative z-20">
+        <section id="services" class="py-20 md:py-32 relative z-20 bg-transparent">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal">
                     <h2 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight text-slate-900">Engineered for Growth.</h2>
@@ -303,7 +297,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto">
-                    <!-- Large Card -->
                     <div class="md:col-span-2 row-span-2 glass-card rounded-[2.5rem] p-8 md:p-14 relative overflow-hidden group reveal">
                         <div class="absolute -top-10 -right-10 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                             <i data-lucide="bot" class="w-40 h-40 md:w-64 md:h-64 text-blue-600"></i>
@@ -324,7 +317,6 @@
                         </div>
                     </div>
 
-                    <!-- Small Card 1 -->
                     <div class="glass-card rounded-[2.5rem] p-8 reveal reveal-delay-1 flex flex-col justify-between h-72 md:h-auto">
                         <div class="w-14 h-14 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center mb-4">
                             <i data-lucide="zap" class="text-indigo-600 w-7 h-7"></i>
@@ -335,7 +327,6 @@
                         </div>
                     </div>
 
-                    <!-- Small Card 2 -->
                     <div class="glass-card rounded-[2.5rem] p-8 reveal reveal-delay-2 flex flex-col justify-between h-72 md:h-auto">
                         <div class="w-14 h-14 bg-cyan-50 border border-cyan-100 rounded-2xl flex items-center justify-center mb-4">
                             <i data-lucide="bar-chart-3" class="text-cyan-600 w-7 h-7"></i>
@@ -346,7 +337,6 @@
                         </div>
                     </div>
                     
-                    <!-- Wide Card -->
                     <div class="md:col-span-3 glass-card rounded-[2.5rem] p-8 md:p-14 flex flex-col md:flex-row items-start md:items-center justify-between reveal gap-8">
                         <div class="flex-1">
                             <h3 class="text-xl md:text-3xl font-bold mb-4 text-slate-800">Content at Scale</h3>
@@ -362,8 +352,7 @@
             </div>
         </section>
 
-        <!-- Process Section -->
-        <section id="process" class="py-20 md:py-32 border-t border-slate-200 relative z-10">
+        <section id="process" class="py-20 md:py-32 relative z-10 bg-transparent">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal">
                     <h2 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight text-slate-900">The Process.</h2>
@@ -391,8 +380,7 @@
             </div>
         </section>
 
-        <!-- AI PLAYGROUND -->
-        <section id="playground" class="py-20 md:py-32 relative z-20 border-t border-slate-200 bg-white/50">
+        <section id="playground" class="py-20 md:py-32 relative z-20 bg-transparent">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 reveal">
                     <span class="inline-block py-1 px-3 rounded-full bg-purple-100 border border-purple-200 text-purple-600 text-[10px] font-bold uppercase tracking-wider mb-4">
@@ -462,13 +450,15 @@
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="py-12 border-t border-slate-200 bg-slate-50 text-center text-slate-400 text-xs md:text-sm">
+        <footer class="py-12 bg-transparent text-center text-slate-400 text-xs md:text-sm relative z-20">
             <p>&copy; 2025 Mister C Digital.</p>
+            <div class="mt-2 space-x-4">
+                <a href="privacy.html" class="hover:text-blue-500">Privacy</a>
+                <a href="terms.html" class="hover:text-blue-500">Terms</a>
+            </div>
         </footer>
     </main>
 
-    <!-- Modal -->
     <div id="customModal" class="fixed inset-0 bg-black/20 backdrop-blur-md z-[9999] hidden items-center justify-center p-4" onclick="closeModal()">
         <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-sm w-full shadow-2xl" onclick="event.stopPropagation()">
             <h4 id="modalTitle" class="text-lg font-bold text-slate-900 mb-2">Notice</h4>
@@ -477,8 +467,6 @@
         </div>
     </div>
 
-
-    <!-- JAVASCRIPT -->
     <script>
         const apiKey = "AIzaSyAD45jE-76AN0XzO7olAZQLx7ATiRfehO8";
         const apiUrlBase = "https://generativelanguage.googleapis.com/v1beta/models/";
@@ -494,14 +482,11 @@
                 const navHeight = 80;
                 const elementPosition = el.getBoundingClientRect().top + window.scrollY;
                 const offsetPosition = elementPosition - navHeight;
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
+                window.scrollTo({ top: offsetPosition, behavior: "smooth" });
             }
         }
 
-        // Mobile Menu
+        // Mobile Menu Logic
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         
@@ -515,6 +500,20 @@
             }
             lucide.createIcons();
         }
+        
+        // FIX: Scrolls to section and closes menu
+        function handleMobileNav(sectionId) {
+            toggleMobileMenu(); // Close Menu
+            // Wait for menu to close visually before scrolling
+            setTimeout(() => {
+                if(sectionId === 'home') {
+                    navigateTo('home');
+                } else {
+                    scrollToSection(sectionId);
+                }
+            }, 200);
+        }
+
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
 
         // Observer
