@@ -479,37 +479,15 @@
         </section>
 
         <footer class="py-12 bg-transparent text-center text-slate-400 text-xs md:text-sm relative z-20">
-            <div class="anpc-container">
+            <div class="anpc-floating">
   <a href="https://anpc.ro/ce-este-sal/" target="_blank" rel="nofollow">
-    <img src="https://wpfitness.eu/wp-content/uploads/2022/10/anpc-sal.png" alt="Soluționarea Alternativă a Litigiilor">
+    <img src="https://wpfitness.eu/wp-content/uploads/2022/10/anpc-sal.png" alt="SAL">
   </a>
   <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="nofollow">
-    <img src="https://wpfitness.eu/wp-content/uploads/2022/10/anpc-sol.png" alt="Soluționarea Online a Litigiilor">
+    <img src="https://wpfitness.eu/wp-content/uploads/2022/10/anpc-sol.png" alt="SOL">
   </a>
 </div>
 
-<style>
-  .anpc-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin: 30px 0 10px 0;
-  }
-
-  .anpc-container img {
-    width: 200px;
-    max-width: 45vw;
-    height: auto;
-  }
-
-  @media (min-width: 768px) {
-    .anpc-container img {
-      width: 240px;
-      max-width: 240px;
-    }
-  }
-</style>
 
             <p>&copy; 2025 Mister C Digital.</p>
             <div class="mt-2 space-x-4">
@@ -1244,6 +1222,41 @@
 
 })();
 </script>
+<style>
+  footer {
+    position: relative;
+  }
+
+  .anpc-floating {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+  }
+
+  .anpc-floating:hover {
+    opacity: 0.85;
+  }
+
+  .anpc-floating img {
+    width: 70px;
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
+    .anpc-floating {
+      right: 10px;
+      bottom: 10px;
+    }
+    .anpc-floating img {
+      width: 55px;
+    }
+  }
+</style>
 
 </body>
 </html>
