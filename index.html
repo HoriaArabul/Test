@@ -994,5 +994,224 @@
   };
 })();
 </script>
+    <script>
+/* --- Compatibility / fixes patch for cookie banner, scrolling and mobile menu --- */
+(function(){
+  const cookieName = "lg_gdpr_consent_v1";
+  const banner = document.getElementById('lg-gdpr');
+  const settings = document.getElementById('lg-settings');
+  const acceptBtn = document.getElementById('lg-accept');
+  const declineBtn = document.getElementById('lg-decline');
+  const settingsBtn = document.getElementById('lg-settings-btn');
+  const privacyLink = document.getElementById('lg-privacy-link');
+
+  // Make sure the privacy link opens in a new tab and is safe
+  if(privacyLink){
+    privacyLink.setAttribute('target','_blank');
+    privacyLink.setAttribute('rel','noopener noreferrer');
+    // assure the href is set (if your file sits in a subfolder change this accordingly)
+    if(!privacyLink.getAttribute('href') || privacyLink.getAttribute('href') === '#'){
+      privacyLink.setAttribute('href', 'privacy.html');
+    }
+  }
+
+  // Also ensure footer links open in a new tab (defensive)
+  try {
+    document.querySelectorAll('footer a[href*="privacy.html"], footer a[href*="terms.html"]').forEach(a=>{
+      a.setAttribute('target','_blank');
+      a.setAttribute('rel','noopener noreferrer');
+    });
+  } catch(e){ /* ignore */ }
+
+  // Robust storage: primary = localStorage, fallback = cookie (so banner visibility is consistent)
+  function writeConsent(consentObj){
+    try {
+      localStorage.setItem(cookieName, JSON.stringify(consentObj));
+    } catch(e) { /* localStorage might be blocked */ }
+    // set cookie as fallback (path=/)
+    try {
+      const d = new Date();
+      d.setTime(d.getTime() + (180*24*60*60*1000));
+      let cookieStr = cookieName + "=" + encodeURIComponent(JSON.stringify(consentObj)) + ";path=/;expires=" + d.toUTCString() + ";SameSite=Lax;";
+      if(location.protocol === 'https:') cookieStr += "Secure;";
+      document.cookie = cookieStr;
+    } catch(e){}
+  }
+  function readConsent(){
+    try {
+      const ls = localStorage.getItem(cookieName);
+      if(ls) return JSON.parse(ls);
+    } catch(e){}
+    // fallback to cookie
+    try {
+      const re = new RegExp('(?:^|; )' + cookieName.replace(/([.$?*|{}()[]\\\/+^])/g,'\\$1') + '=([^;]*)');
+      const m = document.cookie.match(re);
+      if(m) return JSON.parse(decodeURIComponent(m[1]));
+    } catch(e){}
+    return null;
+  }
+
+  function showBanner(){
+    if(!banner) return;
+    banner.hidden = false;
+    // make it clickable only when visible
+    banner.style.pointerEvents = 'auto';
+    requestAnimationFrame(()=> banner.classList.add('show'));
+  }
+  function hideBanner(){
+    if(!banner) return;
+    // prevent pointer events during hide animation to avoid clicks being swallowed
+    banner.style.pointerEvents = 'none';
+    banner.classList.remove('show');
+    setTimeout(()=> banner.hidden = true, 320);
+  }
+
+  // attach handlers (use writeConsent so both cookie & localStorage are set)
+  if(acceptBtn){
+    acceptBtn.addEventListener('click', () => {
+      const consent = { essential:true, analytics:true, marketing:true, timestamp: new Date().toISOString() };
+      writeConsent(consent);
+      window.dispatchEvent(new CustomEvent('lg.gdpr.accept', {detail: consent}));
+      hideBanner();
+    });
+  }
+  if(declineBtn){
+    declineBtn.addEventListener('click', () => {
+      const consent = { essential:true, analytics:false, marketing:false, timestamp: new Date().toISOString() };
+      writeConsent(consent);
+      window.dispatchEvent(new CustomEvent('lg.gdpr.decline'));
+      hideBanner();
+    });
+  }
+  if(settingsBtn){
+    settingsBtn.addEventListener('click', ()=>{
+      if(settings){
+        settings.classList.add('open');
+        settings.setAttribute('aria-hidden', 'false');
+        const current = readConsent();
+        document.getElementById('lg-analytics-toggle').checked = current ? !!current.analytics : false;
+        document.getElementById('lg-marketing-toggle').checked = current ? !!current.marketing : false;
+      }
+    });
+  }
+  // keep existing Settings save/cancel logic working (they already exist in your file),
+  // but ensure Save also writes to storage (defensive: if original code didn't)
+  const saveBtn = document.getElementById('lg-save-settings');
+  if(saveBtn){
+    saveBtn.addEventListener('click', ()=>{
+      const analytics = !!document.getElementById('lg-analytics-toggle').checked;
+      const marketing = !!document.getElementById('lg-marketing-toggle').checked;
+      const consent = { essential:true, analytics, marketing, timestamp: new Date().toISOString() };
+      writeConsent(consent);
+      if(analytics || marketing) window.dispatchEvent(new CustomEvent('lg.gdpr.accept', {detail: consent}));
+      else window.dispatchEvent(new CustomEvent('lg.gdpr.decline'));
+      if(settings){
+        settings.classList.remove('open');
+        settings.setAttribute('aria-hidden', 'true');
+      }
+      hideBanner();
+    });
+  }
+  const cancelSettings = document.getElementById('lg-cancel-settings');
+  if(cancelSettings){
+    cancelSettings.addEventListener('click', ()=>{
+      if(settings){
+        settings.classList.remove('open');
+        settings.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
+  // Initial banner visibility: check localStorage/cookie first
+  const existing = readConsent();
+  if(existing){
+    if(existing.analytics || existing.marketing){
+      window.dispatchEvent(new CustomEvent('lg.gdpr.accept', {detail: existing}));
+      // keep banner hidden
+      if(banner) { banner.hidden = true; banner.classList.remove('show'); banner.style.pointerEvents = 'none'; }
+    } else {
+      window.dispatchEvent(new CustomEvent('lg.gdpr.decline'));
+      if(banner) { banner.hidden = true; banner.classList.remove('show'); banner.style.pointerEvents = 'none'; }
+    }
+  } else {
+    // show it after a small delay
+    setTimeout(showBanner, 220);
+  }
+
+  // ---- Scroll helper improvements ----
+  // Replace/augment your scroll function to compute navbar height dynamically and to wait when mobile menu is closing.
+  window.scrollToSection = function(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    const navbar = document.getElementById('navbar');
+    const navHeight = navbar ? navbar.offsetHeight : 80;
+    const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+    const offsetPosition = Math.max(0, elementPosition - navHeight - 8);
+    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+  };
+
+  // mobileScrollTo: ensure menu is closed first (if open) then scroll (wait a bit for closing animation)
+  window.mobileScrollTo = function(id){
+    const mobileMenu = document.getElementById('mobile-menu');
+    // close menu if open (uses your toggleMobileMenu function if present)
+    try {
+      if(mobileMenu && mobileMenu.classList.contains('open') && typeof toggleMobileMenu === 'function'){
+        toggleMobileMenu();
+        // wait a bit for the animation to finish
+        setTimeout(()=> window.scrollToSection(id), 360);
+      } else {
+        // menu not open (or toggle not available) — just scroll
+        window.scrollToSection(id);
+      }
+    } catch(e){
+      // fallback
+      setTimeout(()=> window.scrollToSection(id), 300);
+    }
+  };
+
+  // Defensive: add event listeners to the mobile "Services" and "Process" buttons (some phones block inline onclick or event ordering)
+  try {
+    document.querySelectorAll('#mobile-menu .mobile-menu-btn-item').forEach(btn => {
+      if(btn.tagName.toLowerCase() === 'button'){
+        const text = (btn.textContent || '').trim().toLowerCase();
+        if(text.includes('services')){
+          btn.addEventListener('click', ()=> mobileScrollTo('services'));
+        } else if(text.includes('process')){
+          btn.addEventListener('click', ()=> mobileScrollTo('process'));
+        }
+      }
+    });
+  } catch(e){ /* ignore */ }
+
+  // Make sure the top "Learn more" button and similar call the global scroll function (defensive override)
+  document.querySelectorAll('[onclick]').forEach(el=>{
+    // normalise common inline calls (only if they reference scrollToSection)
+    const oc = el.getAttribute('onclick') || '';
+    if(/\bscrollToSection\(['"]([^'"]+)['"]\)/.test(oc)){
+      // remove inline handler to avoid double-binding, rely on our function
+      el.removeAttribute('onclick');
+      const match = oc.match(/\bscrollToSection\(['"]([^'"]+)['"]\)/);
+      if(match && match[1]){
+        el.addEventListener('click', (e)=> {
+          e.preventDefault();
+          window.scrollToSection(match[1]);
+        });
+      }
+    }
+  });
+
+  // Accessibility: allow Escape to close settings (already in your code but keep redundancy)
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){
+      if(settings && settings.classList.contains('open')){
+        settings.classList.remove('open');
+        settings.setAttribute('aria-hidden', 'true');
+      }
+    }
+  });
+
+})();
+</script>
+
 </body>
 </html>
