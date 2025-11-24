@@ -506,8 +506,8 @@
     </div>
 
     <script>
-        const apiKey = "AIzaSyAIyQ2Q2y_jcPjURo8SF_WLn4GDkR4sl9I";
-        const apiUrlBase = "https://generativelanguage.googleapis.com/v1beta/models/";
+
+        const apiUrlBase = "https://dark-mountain-e456.horiacostache.workers.dev/";
         const modelName = "gemini-2.5-flash"; 
 
         function navigateTo(sectionId) {
@@ -627,7 +627,7 @@
         async function callGemini(text, targetId, type) {
             try {
                 const response = await fetchWithRetry(
-                    `${apiUrlBase}${modelName}:generateContent?key=${apiKey}`,
+                    `${apiUrlBase}${modelName}:generateContent`,
                     {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
