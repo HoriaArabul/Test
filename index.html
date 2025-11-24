@@ -14,41 +14,37 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             position: relative;
-            background-color: transparent; /* Body is transparent now */
+            background-color: transparent; 
         }
 
-        /* --- NEW: DEDICATED BACKGROUND LAYER (Fixes iPhone Bug) --- */
+        /* --- BACKGROUND LAYER --- */
         #bg-layer {
             position: fixed;
             top: 0; 
             left: 0; 
             width: 100%; 
             height: 100vh;
-            z-index: -100; /* Deepest layer */
-            background-color: #3b82f6; /* Start Blue */
-            
-            /* iOS Hardware Acceleration Hints */
+            z-index: -100; 
+            background-color: #3b82f6; 
             will-change: background-color;
             transform: translateZ(0); 
             -webkit-transform: translateZ(0);
-            
-            /* The Fade Animation */
             animation: bg-shift-to-light 1s ease-in-out 1.4s forwards;
         }
 
         @keyframes bg-shift-to-light {
             from { background-color: #3b82f6; }
-            to { background-color: #eff6ff; } /* Ice Blue */
+            to { background-color: #eff6ff; } 
         }
 
-        /* --- BACKGROUND ANIMATION (The Swoosh) --- */
+        /* --- BACKGROUND ANIMATION --- */
         .bg-wipe-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            z-index: -50; /* Above bg-layer, below content */
+            z-index: -50; 
             pointer-events: none;
             overflow: hidden;
         }
@@ -59,21 +55,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #ffffff; /* Pure White */
-            
-            /* DESKTOP SHAPE */
+            background-color: #ffffff; 
             clip-path: polygon(35% 0, 100% 0, 100% 100%, 15% 100%);
-            
             transform: translateX(100%); 
             animation: swoosh-enter 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             animation-delay: 0.2s; 
             box-shadow: -20px 0 50px rgba(0,0,0,0.05);
         }
 
-        /* --- MOBILE CLIP PATH --- */
         @media (max-width: 768px) {
             .white-wipe {
-                /* Diagonal cut for mobile readability */
                 clip-path: polygon(40% 0, 100% 0, 100% 100%, 0% 100%);
             }
         }
@@ -83,7 +74,7 @@
             100% { transform: translateX(0); }
         }
 
-        /* --- NAVBAR GLASS --- */
+        /* --- NAVBAR --- */
         .liquid-glass-nav {
             background: rgba(255, 255, 255, 0.1); 
             backdrop-filter: blur(12px) saturate(120%);
@@ -133,7 +124,7 @@
             background: rgba(59, 130, 246, 0.08); 
         }
 
-        /* --- MOBILE MENU ANIMATION & STYLE --- */
+        /* --- MOBILE MENU --- */
         .mobile-glass-container {
             position: absolute;
             top: 80px; 
@@ -152,8 +143,6 @@
             z-index: 9999; 
             overflow-y: auto;
             padding-bottom: 100px;
-            
-            /* Animation Properties */
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
@@ -194,7 +183,7 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
         
         /* Reactor */
-        .reactor-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .reactor-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
         .reactor-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(59, 130, 246, 0.1); }
         .ring-1 { width: 100%; height: 100%; background: conic-gradient(from 0deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%); animation: spin 20s linear infinite; }
         .ring-2 { width: 70%; height: 70%; border: 1px dashed rgba(59, 130, 246, 0.3); animation: spin-reverse 30s linear infinite; }
@@ -249,8 +238,8 @@
                 <div class="hidden md:flex items-center gap-2">
                     <a href="#" onclick="navigateTo('home'); scrollToSection('services')" class="nav-link text-sm">Services</a>
                     <a href="#" onclick="navigateTo('home'); scrollToSection('process')" class="nav-link text-sm">Process</a>
-                    <a href="terms.html" class="nav-link text-xs text-slate-400 hover:text-blue-600">Terms</a>
-                    <a href="privacy.html" class="nav-link text-xs text-slate-400 hover:text-blue-600">Privacy</a>
+                    <a href="terms.html" target="_blank" class="nav-link text-xs text-slate-400 hover:text-blue-600">Terms</a>
+                    <a href="privacy.html" target="_blank" class="nav-link text-xs text-slate-400 hover:text-blue-600">Privacy</a>
                     
                     <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="ml-4 btn-liquid px-6 py-2.5 rounded-full text-xs font-bold tracking-wide uppercase">
                         Book a Call
@@ -273,8 +262,8 @@
             
             <div class="w-4/5 h-px bg-slate-200 my-4"></div>
             
-            <a href="terms.html" class="mobile-menu-btn-item text-sm no-underline block w-[85%]">Terms of Service</a>
-            <a href="privacy.html" class="mobile-menu-btn-item text-sm no-underline block w-[85%]">Privacy Policy</a>
+            <a href="terms.html" target="_blank" class="mobile-menu-btn-item text-sm no-underline block w-[85%]">Terms of Service</a>
+            <a href="privacy.html" target="_blank" class="mobile-menu-btn-item text-sm no-underline block w-[85%]">Privacy Policy</a>
 
             <div class="w-4/5 h-px bg-slate-200 my-4"></div>
 
@@ -291,7 +280,7 @@
             
             <div class="max-w-5xl mx-auto w-full flex flex-col items-center justify-center relative z-10">
                 
-                <div class="reveal mb-8 relative group h-[300px] md:h-[400px] flex items-center justify-center w-full max-w-lg mx-auto">
+                <div class="reveal mb-8 relative group h-[300px] md:h-[400px] flex items-center justify-center w-full max-w-lg mx-auto pointer-events-none">
                      <div class="absolute top-1/2 left-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                         <div class="reactor-container opacity-50">
                             <div class="reactor-ring ring-1"></div>
@@ -316,11 +305,11 @@
                     We build intelligent AI infrastructures that scale your business while you sleep.
                 </p>
                 
-                <div class="reveal reveal-delay-3 flex flex-col w-full sm:w-auto sm:flex-row gap-5 justify-center items-center relative z-50">
+                <div class="reveal reveal-delay-3 flex flex-col w-full sm:w-auto sm:flex-row gap-5 justify-center items-center relative z-[60]">
                     <a href="https://calendly.com/mistercdigital/let-s-talk-about-your-business?month=2025-11" target="_blank" class="w-full sm:w-auto btn-liquid px-10 py-4 rounded-full text-lg font-bold text-center">
                         Start Transformation
                     </a>
-                    <button onclick="scrollToSection('services')" class="w-full sm:w-auto text-slate-500 hover:text-slate-900 flex items-center justify-center gap-2 px-6 py-4 transition-colors rounded-full hover:bg-slate-100/50">
+                    <button onclick="scrollToSection('services')" class="w-full sm:w-auto text-slate-500 hover:text-slate-900 flex items-center justify-center gap-2 px-6 py-4 transition-colors rounded-full hover:bg-slate-100/50 cursor-pointer">
                         Learn more <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -492,8 +481,8 @@
         <footer class="py-12 bg-transparent text-center text-slate-400 text-xs md:text-sm relative z-20">
             <p>&copy; 2025 Mister C Digital.</p>
             <div class="mt-2 space-x-4">
-                <a href="privacy.html" class="hover:text-blue-500">Privacy policy</a>
-                <a href="terms.html" class="hover:text-blue-500">Terms of service</a>
+                <a href="privacy.html" target="_blank" class="hover:text-blue-500">Privacy policy</a>
+                <a href="terms.html" target="_blank" class="hover:text-blue-500">Terms of service</a>
             </div>
         </footer>
     </main>
@@ -507,13 +496,8 @@
     </div>
 
     <script>
-        // NOTE: If you are still seeing errors after this fix, the API key itself 
-        // (AIzaSyAD45jE-76AN0XzO7olAZQLx7ATiRfehO8) may be invalid, expired, or have 
-        // incorrect permissions set in Google AI Studio.
         const apiKey = "AIzaSyAPv3GQ__oZ_6Ci4K1cXq7GYAKrHpoVuyo";
         const apiUrlBase = "https://generativelanguage.googleapis.com/v1beta/models/";
-        
-        // ** FIX APPLIED HERE: Changed to a valid model name **
         const modelName = "gemini-2.5-flash"; 
 
         function navigateTo(sectionId) {
@@ -533,6 +517,15 @@
             }
         }
 
+        // --- NEW: FUNCTION TO HANDLE MOBILE SCROLLING ---
+        function mobileScrollTo(id) {
+            toggleMobileMenu(); // Close the menu first
+            // Wait slightly for menu to start closing before scrolling
+            setTimeout(() => {
+                scrollToSection(id);
+            }, 300);
+        }
+
         // Mobile Menu
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -541,9 +534,9 @@
             mobileMenu.classList.toggle('open');
             const icon = mobileMenuBtn.querySelector('i');
             if (mobileMenu.classList.contains('open')) {
-                icon.setAttribute('data-lucide', 'menu');
+                icon.setAttribute('data-lucide', 'x'); // Fix: changed from 'menu' to 'x' when open
             } else {
-                icon.setAttribute('data-lucide', 'x');
+                icon.setAttribute('data-lucide', 'menu');
             }
             lucide.createIcons();
         }
@@ -643,10 +636,10 @@
             }
         }
     </script>
-    <!-- Liquid Glass GDPR banner (paste before </body>) -->
+    
 <style>
   :root{
-    --lg-accent: 150 80% 60%; /* hue saturation lightness for accent (HSL) used with HSL syntax in JS/CSS */
+    --lg-accent: 150 80% 60%; 
     --lg-bg: rgba(255,255,255,0.06);
     --lg-border: rgba(255,255,255,0.14);
     --lg-text: #000000;
@@ -804,7 +797,6 @@
   .lg-category .cat-info b{ display:block; font-size:14px; margin-bottom:4px; }
   .lg-toggle { display:flex; gap:8px; align-items:center; }
 
-  /* tiny helper for small screens */
   @media (max-width:720px){
     #lg-gdpr { grid-template-columns: 1fr; left:50%; transform: translateX(-50%) translateY(20px); padding:14px; gap:12px; bottom:18px; }
     #lg-gdpr .lg-actions { justify-content:flex-end; width:100%; }
@@ -818,7 +810,7 @@
       <h4 class="lg-title">We use cookies to improve your experience</h4>
       <p class="lg-desc">
         We and our partners use cookies for analytics, personalization and targeted ads. By clicking “Accept” you consent to this. Manage your preferences or read our
-        <a href="#" id="lg-privacy-link" target="privacy.html" rel="noopener">Privacy Policy</a>.
+        <a href="#" id="lg-privacy-link" target="_blank" rel="noopener">Privacy Policy</a>.
       </p>
     </div>
   </div>
@@ -830,7 +822,6 @@
   </div>
 </div>
 
-<!-- Settings sheet -->
 <div id="lg-settings" role="dialog" aria-modal="true" aria-hidden="true">
   <h3>Cookie preferences</h3>
   <p style="margin:0 0 12px 0; color:var(--lg-muted); font-size:13px;">Select the types of cookies you allow.</p>
@@ -873,7 +864,8 @@
 
 <script>
 (function(){
-  const privacyUrl = "https://ai.mistercdigital.com/politica-de-confidentialitate" /* change if needed */;
+  // FIXED: Changed this to the internal privacy.html file
+  const privacyUrl = "privacy.html"; 
   const cookieName = "lg_gdpr_consent_v1";
   const expireDays = 180;
 
@@ -899,7 +891,6 @@
 
   function showBanner(){
     banner.hidden = false;
-    // small timeout to allow transition
     requestAnimationFrame(()=> banner.classList.add('show'));
   }
   function hideBanner(){
@@ -907,7 +898,6 @@
     setTimeout(()=> banner.hidden = true, 320);
   }
 
-  // Save consent object: {essential: true, analytics: bool, marketing: bool, timestamp}
   function saveConsent(obj){
     obj.timestamp = new Date().toISOString();
     setCookie(cookieName, JSON.stringify(obj), expireDays);
@@ -923,26 +913,14 @@
     }
   }
 
-  // Hook placeholders — put your actual init/disable logic here
   function onAccept(consent){
-    // Consent accepted — enable services according to consent
-    // Example:
-    if(consent.analytics){
-      // init your analytics here, e.g. loadGA();
-    }
-    if(consent.marketing){
-      // init marketing pixels here
-    }
-    // You can dispatch a custom event so other scripts can respond:
     window.dispatchEvent(new CustomEvent('lg.gdpr.accept', {detail: consent}));
   }
 
   function onDecline(){
-    // User declined non-essential cookies — ensure you disable trackers
     window.dispatchEvent(new CustomEvent('lg.gdpr.decline'));
   }
 
-  // Buttons
   acceptBtn.addEventListener('click', ()=> {
     const consent = { essential: true, analytics: true, marketing: true };
     saveConsent(consent);
@@ -958,10 +936,8 @@
   });
 
   settingsBtn.addEventListener('click', ()=> {
-    // show settings sheet
     settings.classList.add('open');
     settings.setAttribute('aria-hidden', 'false');
-    // load toggles from existing cookie if present
     const current = readConsent();
     document.getElementById('lg-analytics-toggle').checked = current ? !!current.analytics : false;
     document.getElementById('lg-marketing-toggle').checked = current ? !!current.marketing : false;
@@ -987,22 +963,17 @@
     hideBanner();
   });
 
-  // If cookie present, do not show banner but trigger appropriate callbacks on page load
   const existing = readConsent();
   if(existing){
-    // Respect stored preferences immediately
     if(existing.analytics || existing.marketing){
       onAccept(existing);
     } else {
       onDecline();
     }
-    // no banner
   } else {
-    // show banner after tiny delay so page visuals settle
     setTimeout(showBanner, 220);
   }
 
-  // Accessibility: close settings with Escape
   document.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape'){
       if(settings.classList.contains('open')){
@@ -1012,12 +983,10 @@
     }
   });
 
-  // Expose a small API
   window.LG_GDPR = {
     getConsent: readConsent,
     openSettings: ()=> settings.classList.add('open'),
     revokeConsent: ()=> {
-      // delete cookie by setting expiry in past
       document.cookie = cookieName + "=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
       showBanner();
       window.dispatchEvent(new CustomEvent('lg.gdpr.revoked'));
@@ -1025,7 +994,5 @@
   };
 })();
 </script>
-</body>
-</html>
 </body>
 </html>
