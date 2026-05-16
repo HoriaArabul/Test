@@ -478,6 +478,346 @@
             </div>
         </section>
 
+        <!-- ═══════════════════════════════════════════
+             NEWSLETTER SECTION
+             ═══════════════════════════════════════════ -->
+        <section id="newsletter" class="relative z-20 px-4 pb-24 pt-8">
+          <style>
+            .nl-wrap {
+              max-width: 860px;
+              margin: 0 auto;
+              position: relative;
+            }
+            /* Ambient glow blobs */
+            .nl-blob-a, .nl-blob-b {
+              position: absolute;
+              border-radius: 50%;
+              pointer-events: none;
+              z-index: 0;
+              filter: blur(80px);
+            }
+            .nl-blob-a {
+              width: 340px; height: 340px;
+              background: radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%);
+              top: -60px; left: -80px;
+              animation: nl-float 9s ease-in-out infinite alternate;
+            }
+            .nl-blob-b {
+              width: 260px; height: 260px;
+              background: radial-gradient(circle, rgba(147,197,253,0.22) 0%, transparent 70%);
+              bottom: -40px; right: -60px;
+              animation: nl-float 11s ease-in-out infinite alternate-reverse;
+            }
+            @keyframes nl-float {
+              from { transform: translate(0,0) scale(1); }
+              to   { transform: translate(24px,16px) scale(1.06); }
+            }
+
+            /* Glass card */
+            .nl-card {
+              position: relative;
+              z-index: 1;
+              background: rgba(255,255,255,0.62);
+              backdrop-filter: blur(28px) saturate(180%);
+              -webkit-backdrop-filter: blur(28px) saturate(180%);
+              border: 1px solid rgba(255,255,255,0.85);
+              border-radius: 28px;
+              box-shadow:
+                0 0 0 1px rgba(255,255,255,0.5) inset,
+                0 20px 60px -10px rgba(59,130,246,0.14),
+                0 4px 24px rgba(0,0,0,0.06);
+              padding: 52px 56px 48px;
+              overflow: hidden;
+            }
+            /* Top shine */
+            .nl-card::before {
+              content: '';
+              position: absolute;
+              top: 0; left: 8%; right: 8%;
+              height: 1px;
+              background: linear-gradient(90deg, transparent, rgba(255,255,255,1) 40%, rgba(255,255,255,1) 60%, transparent);
+            }
+
+            /* Two-column layout */
+            .nl-grid {
+              display: grid;
+              grid-template-columns: 1fr 1px 1fr;
+              gap: 40px;
+              align-items: center;
+            }
+            .nl-divider-col {
+              background: linear-gradient(180deg, transparent, rgba(59,130,246,0.15) 30%, rgba(59,130,246,0.15) 70%, transparent);
+              align-self: stretch;
+            }
+
+            /* Left: copy */
+            .nl-eyebrow {
+              display: inline-flex;
+              align-items: center;
+              gap: 7px;
+              font-size: 10.5px;
+              font-weight: 600;
+              letter-spacing: 0.18em;
+              text-transform: uppercase;
+              color: #2563eb;
+              margin-bottom: 16px;
+            }
+            .nl-dot {
+              width: 6px; height: 6px;
+              background: #3b82f6;
+              border-radius: 50%;
+              box-shadow: 0 0 7px rgba(59,130,246,0.7);
+              animation: nl-pulse 2.4s ease-in-out infinite;
+            }
+            @keyframes nl-pulse {
+              0%,100%{ opacity:1; transform:scale(1); }
+              50%    { opacity:.3; transform:scale(.6); }
+            }
+            .nl-heading {
+              font-size: clamp(1.45rem, 3vw, 2rem);
+              font-weight: 800;
+              line-height: 1.18;
+              letter-spacing: -0.025em;
+              color: #0f172a;
+              margin-bottom: 14px;
+            }
+            .nl-heading .nl-hl {
+              background: linear-gradient(120deg, #2563eb 0%, #60a5fa 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+            }
+            .nl-desc {
+              font-size: 0.93rem;
+              line-height: 1.7;
+              color: #475569;
+              margin-bottom: 24px;
+            }
+            .nl-pills {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+            }
+            .nl-pill {
+              display: inline-flex;
+              align-items: center;
+              gap: 5px;
+              background: rgba(59,130,246,0.07);
+              border: 1px solid rgba(59,130,246,0.18);
+              border-radius: 100px;
+              padding: 5px 13px;
+              font-size: 0.73rem;
+              font-weight: 500;
+              color: #2563eb;
+            }
+
+            /* Right: form */
+            .nl-form-col { display: flex; flex-direction: column; gap: 12px; }
+            .nl-label {
+              font-size: 0.78rem;
+              font-weight: 600;
+              color: #64748b;
+              letter-spacing: 0.04em;
+              margin-bottom: -4px;
+            }
+            .nl-field { position: relative; }
+            .nl-field-icon {
+              position: absolute;
+              left: 15px;
+              top: 50%;
+              transform: translateY(-50%);
+              color: #94a3b8;
+              pointer-events: none;
+              transition: color .2s;
+            }
+            .nl-input {
+              width: 100%;
+              background: rgba(255,255,255,0.6);
+              border: 1px solid rgba(203,213,225,0.6);
+              border-radius: 14px;
+              padding: 14px 16px 14px 44px;
+              font-size: 0.93rem;
+              color: #1e293b;
+              outline: none;
+              box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+              transition: border-color .25s, box-shadow .25s, background .25s;
+              font-family: inherit;
+            }
+            .nl-input::placeholder { color: #94a3b8; }
+            .nl-input:focus {
+              border-color: rgba(59,130,246,0.5);
+              background: rgba(255,255,255,0.9);
+              box-shadow: 0 0 0 3px rgba(59,130,246,0.1), inset 0 2px 4px rgba(0,0,0,0.02);
+            }
+            .nl-field:focus-within .nl-field-icon { color: #3b82f6; }
+
+            /* Button — matches site's .btn-liquid exactly */
+            .nl-btn {
+              position: relative;
+              width: 100%;
+              padding: 15px 24px;
+              background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+              color: white;
+              border: none;
+              border-radius: 14px;
+              font-family: inherit;
+              font-size: 0.92rem;
+              font-weight: 700;
+              cursor: pointer;
+              overflow: hidden;
+              box-shadow:
+                inset 0 2px 1px rgba(255,255,255,0.6),
+                inset 0 -4px 6px rgba(0,0,0,0.1),
+                0 4px 14px rgba(37,99,235,0.4);
+              text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+              transition: all .3s cubic-bezier(.25,.8,.25,1);
+            }
+            .nl-btn-shine {
+              position: absolute;
+              top: 0; left: -110%;
+              width: 55%; height: 100%;
+              background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+              transition: left .5s ease;
+            }
+            .nl-btn:hover .nl-btn-shine { left: 160%; }
+            .nl-btn:hover {
+              transform: translateY(-2px) scale(1.01);
+              background: linear-gradient(180deg, #93c5fd 0%, #3b82f6 100%);
+              box-shadow:
+                inset 0 3px 2px rgba(255,255,255,0.8),
+                inset 0 -4px 12px rgba(0,0,0,0.15),
+                0 10px 28px -5px rgba(37,99,235,0.55);
+            }
+            .nl-btn:active { transform: translateY(0) scale(0.99); }
+            .nl-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+            .nl-status {
+              font-size: 0.84rem;
+              min-height: 20px;
+              font-weight: 500;
+              transition: opacity .3s;
+            }
+            .nl-status.success { color: #16a34a; }
+            .nl-status.error   { color: #dc2626; }
+            .nl-fine {
+              font-size: 0.71rem;
+              color: #94a3b8;
+              text-align: center;
+              font-style: italic;
+              margin-top: -4px;
+            }
+
+            /* Responsive */
+            @media (max-width: 680px) {
+              .nl-card { padding: 36px 24px 32px; }
+              .nl-grid { grid-template-columns: 1fr; gap: 28px; }
+              .nl-divider-col { display: none; }
+            }
+          </style>
+
+          <div class="nl-wrap reveal">
+            <div class="nl-blob-a"></div>
+            <div class="nl-blob-b"></div>
+
+            <div class="nl-card">
+              <div class="nl-grid">
+
+                <!-- Left: copy -->
+                <div>
+                  <p class="nl-eyebrow"><span class="nl-dot"></span>Free Newsletter</p>
+                  <h2 class="nl-heading">
+                    Business tips that<br/><span class="nl-hl">move the needle.</span>
+                  </h2>
+                  <p class="nl-desc">
+                    Every <strong>Monday &amp; Friday</strong> I share real, actionable strategies from the
+                    <em>From Nothing to Something</em> channel — no fluff, no gatekeeping.
+                  </p>
+                  <div class="nl-pills">
+                    <span class="nl-pill">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      2× per week
+                    </span>
+                    <span class="nl-pill">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      Always free
+                    </span>
+                    <span class="nl-pill">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      No spam
+                    </span>
+                    <span class="nl-pill">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      Unsubscribe anytime
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="nl-divider-col"></div>
+
+                <!-- Right: form -->
+                <form class="nl-form-col" id="nlForm" novalidate>
+                  <label class="nl-label" for="nlEmail">Your email address</label>
+                  <div class="nl-field">
+                    <svg class="nl-field-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="4" width="20" height="16" rx="2"/>
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                    <input class="nl-input" type="email" id="nlEmail" name="email" placeholder="your@email.com" autocomplete="email" required/>
+                  </div>
+                  <button class="nl-btn" type="submit" id="nlBtn">
+                    <span class="nl-btn-shine"></span>
+                    Subscribe Free →
+                  </button>
+                  <div class="nl-status" id="nlStatus" role="alert" aria-live="polite"></div>
+                  <p class="nl-fine">Your info is private &amp; never shared.</p>
+                </form>
+
+              </div>
+            </div>
+          </div>
+
+          <script>
+            (function () {
+              var WEBHOOK = 'https://automations.mistercdigital.com/webhook/newsletter-subscribe'; // 👈 replace with your n8n webhook URL
+              var form   = document.getElementById('nlForm');
+              var input  = document.getElementById('nlEmail');
+              var btn    = document.getElementById('nlBtn');
+              var status = document.getElementById('nlStatus');
+              if (!form) return;
+              form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                var email = input.value.trim();
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                  setStatus('Please enter a valid email address.', 'error'); return;
+                }
+                btn.disabled = true;
+                btn.innerHTML = '<span class="nl-btn-shine"></span>Subscribing…';
+                setStatus('', '');
+                try {
+                  var res = await fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, source: 'website_footer', subscribed_at: new Date().toISOString(), newsletter: 'from_nothing_to_something' })
+                  });
+                  if (res.ok) { setStatus('🎉 You\'re in! Check your inbox for a welcome email.', 'success'); form.reset(); }
+                  else throw new Error('err');
+                } catch (_) {
+                  setStatus('Something went wrong — please try again.', 'error');
+                } finally {
+                  btn.disabled = false;
+                  btn.innerHTML = '<span class="nl-btn-shine"></span>Subscribe Free →';
+                }
+              });
+              function setStatus(msg, cls) {
+                status.textContent = msg;
+                status.className = 'nl-status' + (cls ? ' ' + cls : '');
+              }
+            })();
+          </script>
+        </section>
+        <!-- ═══ END NEWSLETTER SECTION ═══ -->
+
         <footer class="py-12 bg-transparent text-center text-slate-400 text-xs md:text-sm relative z-20">
             <div class="anpc-floating">
   <a href="https://anpc.ro/ce-este-sal/" target="_blank" rel="nofollow">
